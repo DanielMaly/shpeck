@@ -70,18 +70,26 @@ Given `toolDir` determined from `--tool`:
 
 2) Tool assets
 - The package MUST ship a `pkg/` directory.
-- `shpeck init` MUST copy the contents of `pkg/` into `toolDir`.
-- Copy behavior MUST be recursive.
-- For each file that exists in both source and destination at the same relative path, the destination file MUST be overwritten when the copy proceeds.
 
-3) Tool directory conflict resolution
-- If `toolDir` does not exist, the command MUST create it and then copy assets.
+- `shpeck init` MUST install tool assets into `toolDir` as specified in Section 7 (including any required transformations).
+- The command MUST create any required parent directories under `toolDir`.
+- When asset installation proceeds:
+  - For each non-settings destination file written by Section 7.1 and 7.2, the destination file MUST be overwritten if it already exists.
+  - For the tool settings file (Section 7.3), the command MUST apply the merge behavior specified in Section 7.3 (not a full overwrite).
+- The command MUST NOT delete or rename `toolDir`.
+- The command MUST NOT delete or rename any existing files or directories under `toolDir`.
+
+3) Tool directory handling
+- If `toolDir` does not exist, the command MUST create it and then proceed with asset installation.
 - If `toolDir` exists:
-  - With `--replace`: the command MUST delete `toolDir` entirely and then recreate it from `pkg/`.
-  - Without `--replace`: the command MUST prompt exactly:
-    - `Directory <toolDir> already exists. Overwrite? [y/N]`
-    - If the user answers yes: the command MUST delete `toolDir` entirely and then recreate it from `pkg/`.
-    - If the user answers no (or presses enter): the command MUST NOT copy any assets and MUST continue to step (4).
+  - With `--replace`: the command MUST proceed with asset installation without prompting.
+  - Without `--replace`:
+    - The command MUST determine whether any destination file written by Section 7 already exists.
+    - If no such destination file exists, the command MUST proceed with asset installation without prompting.
+    - If at least one such destination file exists, the command MUST prompt exactly:
+      - `Shpeck files already exist in <toolDir>. Overwrite? [y/N]`
+      - If the user answers yes: the command MUST proceed with asset installation.
+      - If the user answers no (or presses enter): the command MUST NOT install any tool assets and MUST continue to step (4).
 
 4) Git exclude
 - The command MUST ensure the file `.git/info/exclude` exists.
