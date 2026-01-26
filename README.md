@@ -6,12 +6,14 @@ Shpeck is a workflow framework that helps developers work through complex change
 
 ## What Problem Does This Solve?
 
-When working on real-world codebases, especially older or complex ones, there's a gap between:
-- High-level tickets/requirements (the "what" and "why")
-- Low-level implementation details (the "how")
-- The messy reality of existing code patterns, technical debt, and constraints
+Developing in complex, legacy ("brownfield") codebases with AI agents often leads to **intent drift**. You start with a clear ticket, but as the agent explores, it can get lost in technical debt, hallucinate patterns, or lose track of original requirements during long sessions.
 
-Most tools force you to either work at the ticket level (too abstract) or dive straight into code (too detailed). Shpeck gives you a structured middle layer: a **technical specification** that evolves as you discover how the real codebase actually works.
+Shpeck provides a **structured middle layer** for your development workflow:
+
+- **The Context Gap**: Tickets are often too vague for an agent, while code is too dense. Shpeck's `spec.md` acts as a "middle-tier" source of truth that defines exactly how a feature should work *in your specific codebase*.
+- **AI Amnesia**: Long agent sessions often result in the AI losing track of the original plan. Shpeck persists research findings, technical specs, and execution logs locally, ensuring the agent always has the correct "brain state" across restarts.
+- **The Brownfield Surprise**: Real-world code is messy. Shpeck formalizes the "Discovery → Update Spec → Re-plan" cycle. When the agent finds a blocker, it doesn't just "patch and pray"—it updates the technical authority first.
+- **Zero Repo Pollution**: Shpeck artifacts are strictly local. You get the benefits of Spec-Driven Development without cluttering your team's git history with temporary notes or implementation drafts.
 
 ## Core Philosophy
 
