@@ -36,7 +36,7 @@ trunk_branch = "main"           # Default; set during init
 ```
 
 Notes:
-- `active_context` identifies the current working context. Commands (other than `shpeck init`, `shpeck status`, `shpeck switch`, and `shpeck:new`) refuse to run if no context is active.
+- `active_context` identifies the current working context. Commands (other than `shpeck init`, `shpeck status`, `shpeck switch`, and `shpeck-new`) refuse to run if no context is active.
 - `trunk_branch` identifies the trunk branch for diff comparisons. Defaults to `main` if not specified during init.
 
 ### 3.2 Tool Config Directory
@@ -90,23 +90,23 @@ Context is explicit, not inferred from branch names. The active context is store
 
 Users must run `shpeck switch` to change contexts. This decouples branch naming conventions from Shpeck's operation — teams can use whatever branch naming scheme they prefer.
 
-**Note:** After rebasing or pulling significant upstream changes, run `shpeck:verify` to check for drift between spec and code.
+**Note:** After rebasing or pulling significant upstream changes, run `shpeck-verify` to check for drift between spec and code.
 
 ## 5. Artifact Definitions
 
 ### 5.1 Top-Level Files
 - `context.toml`: Context metadata (type and ticket_key if applicable).
-- `ticket.md`: Local ticket file (ticket contexts only). Contains a verbatim "External Ticket" mirror (overwritten by `shpeck:sync`) plus optional local notes.
+- `ticket.md`: Local ticket file (ticket contexts only). Contains a verbatim "External Ticket" mirror (overwritten by `shpeck-sync`) plus optional local notes.
 - `spec.md`: Mutable technical specification.
   - The first line must be `Version: N` where N is a positive integer, starting at 1.
   - **Simplified versioning:** any change to `spec.md` increments the version.
   - The version is referenced by `plan.md` to track which spec version a plan was generated against.
 - `reviewers.md`: Generated PR description content.
-  - **Constraint:** `reviewers.md` is generated output and is overwritten on each shpeck:explain run; manual edits will be lost.
-  - Generated only by `shpeck:explain`. Overwritten on each run.
+  - **Constraint:** `reviewers.md` is generated output and is overwritten on each shpeck-explain run; manual edits will be lost.
+  - Generated only by `shpeck-explain`. Overwritten on each run.
 
 ### 5.2 `.dev/` Files (Append-Only)
-Files in `.dev/` are append-only for Shpeck commands that write to them. Read-only commands (`shpeck:diagnose`, `shpeck:verify`) do not write to `.dev/`. Users may manually edit or truncate these files if recovery is needed.
+Files in `.dev/` are append-only for Shpeck commands that write to them. Read-only commands (`shpeck-diagnose`, `shpeck-verify`) do not write to `.dev/`. Users may manually edit or truncate these files if recovery is needed.
 - `research.md`: Findings and rationale.
 - `plan.md`: Plan sections. Each plan section records the `spec.md` version it was generated against.
 - `run.md`: Execution log (what ran, what changed, test results, acknowledgments).
@@ -120,18 +120,18 @@ To reduce duplication:
 ## 6. Recovery Workflow
 
 ### 6.1 Discarding Uncommitted Changes
-If `shpeck:code` produces incorrect results and you want to discard uncommitted changes:
+If `shpeck-code` produces incorrect results and you want to discard uncommitted changes:
 1. Discard changes with a scoped restore (example: `git restore <files>`).
-2. Run `shpeck:diagnose` to identify any remaining misalignment between ticket/spec/code.
+2. Run `shpeck-diagnose` to identify any remaining misalignment between ticket/spec/code.
 3. If spec needs adjustment, edit `spec.md` manually and increment the version.
-4. Run `shpeck:plan` to generate a new plan, then `shpeck:code` to re-implement.
+4. Run `shpeck-plan` to generate a new plan, then `shpeck-code` to re-implement.
 
 **Limitation:** This workflow applies to uncommitted changes only. For committed changes, revert manually (e.g., `git revert` or `git reset`) and then follow the same diagnosis/plan/code flow.
 
 ## 7. Workflow & Commands
 Shpeck has two interfaces:
 - Script subcommands: `shpeck init`, `shpeck status`, `shpeck switch`.
-- CLI agent commands: everything else, named `shpeck:{action}`.
+- CLI agent commands: everything else, named `shpeck-{action}`.
 
 ### 7.1 Local Bootstrap (Script)
 `shpeck init --tool=<tool-name> [--trunk=<trunk-branch>]`:
@@ -155,7 +155,7 @@ Shpeck has two interfaces:
 - Interactively lists available contexts and prompts user to select one.
 
 ### 7.2 Mandatory Preflight (All Agent Commands)
-Every `shpeck:{action}` command that requires an active context begins with preflight checks:
+Every `shpeck-{action}` command that requires an active context begins with preflight checks:
 - `.shpeck.toml` exists.
 - Active context is set and resolves to an existing `.spec/{context_name}/` directory.
 - Context type matches command requirements (where applicable).
@@ -164,13 +164,13 @@ Preflight is deterministic in checks, but commands may still include explicit us
 
 ### 7.3 Safety Rule
 To reduce constant negotiation in messy repos:
-- Commands that modify git-tracked files (`shpeck:code`) require a clean working tree.
-- Commands that produce PR text (`shpeck:explain`) require a clean working tree.
-- Commands that only read or write local-only Shpeck artifacts (`shpeck:sync`, `shpeck:refine`, `shpeck:spec`, `shpeck:plan`, `shpeck:verify`, `shpeck:diagnose`) may run with a dirty tree.
+- Commands that modify git-tracked files (`shpeck-code`) require a clean working tree.
+- Commands that produce PR text (`shpeck-explain`) require a clean working tree.
+- Commands that only read or write local-only Shpeck artifacts (`shpeck-sync`, `shpeck-refine`, `shpeck-spec`, `shpeck-plan`, `shpeck-verify`, `shpeck-diagnose`) may run with a dirty tree.
 
 **Note:** "Clean working tree" means no uncommitted changes to tracked files. Untracked files are ignored.
 
-**Note:** Shpeck does not manage commits. Users commit at their discretion. Multiple `shpeck:code` runs are permitted, but each run must start from a clean tracked tree (commit/stash/restore between runs).
+**Note:** Shpeck does not manage commits. Users commit at their discretion. Multiple `shpeck-code` runs are permitted, but each run must start from a clean tracked tree (commit/stash/restore between runs).
 
 ### 7.4 Context Requirements
 
@@ -179,19 +179,19 @@ To reduce constant negotiation in messy repos:
 | `shpeck init`     | No                       | —                        |
 | `shpeck status`   | No                       | —                        |
 | `shpeck switch`   | No                       | —                        |
-| `shpeck:new`      | No                       | —                        |
-| `shpeck:promote`  | Yes                      | Draft only               |
-| `shpeck:sync`     | Yes                      | Ticket only              |
-| `shpeck:refine`   | Yes                      | Ticket only              |
-| `shpeck:spec`     | Yes                      | Any                      |
-| `shpeck:plan`     | Yes                      | Any                      |
-| `shpeck:code`     | Yes                      | Any                      |
-| `shpeck:diagnose` | Yes                      | Any                      |
-| `shpeck:verify`   | Yes                      | Any                      |
-| `shpeck:explain`  | Yes                      | Any                      |
+| `shpeck-new`      | No                       | —                        |
+| `shpeck-promote`  | Yes                      | Draft only               |
+| `shpeck-sync`     | Yes                      | Ticket only              |
+| `shpeck-refine`   | Yes                      | Ticket only              |
+| `shpeck-spec`     | Yes                      | Any                      |
+| `shpeck-plan`     | Yes                      | Any                      |
+| `shpeck-code`     | Yes                      | Any                      |
+| `shpeck-diagnose` | Yes                      | Any                      |
+| `shpeck-verify`   | Yes                      | Any                      |
+| `shpeck-explain`  | Yes                      | Any                      |
 
-### 7.5 `shpeck:new` (Context Creation)
-`shpeck:new`:
+### 7.5 `shpeck-new` (Context Creation)
+`shpeck-new`:
 - Prompts: "Is this for a ticket or a draft?"
 - **If ticket:**
   - Prompts for `ticket_key`.
@@ -208,36 +208,36 @@ In both cases:
 - Sets `.shpeck.toml.active_context` to the new context.
 - Optionally offers to create and switch to a new git branch (user provides branch name).
 
-### 7.6 `shpeck:promote` (Draft to Ticket)
+### 7.6 `shpeck-promote` (Draft to Ticket)
 Draft-only: converts a draft context to a ticket context.
 - Prompts for `ticket_key`.
 - Updates `context.toml` to type=ticket and adds ticket_key.
 - Creates `ticket.md` via integration or paste flow.
 - Context directory keeps its original name; `ticket_key` in `context.toml` provides traceability.
 
-### 7.7 `shpeck:sync`
+### 7.7 `shpeck-sync`
 Ticket-only: pull external ticket content and update the verbatim "External Ticket" mirror in `ticket.md`. Pure fetch/paste — no analysis or comparison. Logs outcome in `.dev/run.md`.
 
-### 7.8 `shpeck:refine`
+### 7.8 `shpeck-refine`
 Ticket-only: explore the codebase and append findings to `.dev/research.md`. This is the only command that compares ticket content to the codebase. May surface ambiguities or suggest clarifications to `ticket.md` based on technical discoveries (e.g., "the ticket says X but the code already does Y"), but the primary output is research, not ticket updates.
 
-### 7.9 `shpeck:spec`
+### 7.9 `shpeck-spec`
 Generate or update `spec.md`, incrementing `Version:`.
 - **Ticket contexts:** generates from `ticket.md` and `.dev/research.md`.
 - **Draft contexts:** interactive flow where the user describes intent conversationally; the command shapes it into spec format and may append codebase findings/rationale to `.dev/research.md`.
 
-### 7.10 `shpeck:plan`
+### 7.10 `shpeck-plan`
 Read `spec.md` and append a new plan section to `.dev/plan.md`. The plan section records the current `spec.md` version.
 If planning uncovers unknowns/assumptions, record them in `.dev/research.md` (rationale) rather than expanding `spec.md`.
 
-### 7.11 `shpeck:code`
+### 7.11 `shpeck-code`
 Execute the most recent plan.
-- **Precondition:** The most recent plan section's recorded spec version must match the current `spec.md` version. If not, fails with a message to run `shpeck:plan` first.
+- **Precondition:** The most recent plan section's recorded spec version must match the current `spec.md` version. If not, fails with a message to run `shpeck-plan` first.
 - **Precondition:** Must not be on the configured trunk branch (`.shpeck.toml.trunk_branch`).
 - Prompts for confirmation before proceeding.
 - Runs relevant tests and logs results in `.dev/run.md`.
 
-### 7.12 `shpeck:diagnose`
+### 7.12 `shpeck-diagnose`
 Read-only analysis of divergence between ticket, spec, and implementation.
 - User describes a bug or unexpected behavior.
 - Command traces the issue through layers (implementation -> spec -> ticket).
@@ -245,18 +245,18 @@ Read-only analysis of divergence between ticket, spec, and implementation.
 - Provides a recommended action path using existing commands.
 - **Does not make changes** — diagnosis only.
 
-### 7.13 `shpeck:verify`
+### 7.13 `shpeck-verify`
 Self-review changes.
 - Ticket contexts: compare `ticket.md` vs `spec.md` and flag mismatches.
 - Compare implementation (working tree state) against `spec.md` and flag deviations.
-- May identify issues that require further `shpeck:plan` -> `shpeck:code` cycles.
+- May identify issues that require further `shpeck-plan` -> `shpeck-code` cycles.
 - Does not generate `reviewers.md`.
 
 **Note:** For draft contexts, only compares implementation against `spec.md` (no ticket comparison).
 
-**Contrast with `shpeck:diagnose`:** `verify` is a general health check. `diagnose` requires user input describing a specific problem to trace.
+**Contrast with `shpeck-diagnose`:** `verify` is a general health check. `diagnose` requires user input describing a specific problem to trace.
 
-### 7.14 `shpeck:explain`
+### 7.14 `shpeck-explain`
 Generate `reviewers.md` from current state.
 - Reads `spec.md`, `ticket.md` (if present), `.dev/` files, and the current git diff against trunk.
 - Produces a PR-ready description in `reviewers.md`.
