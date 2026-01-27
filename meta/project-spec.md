@@ -25,6 +25,11 @@ The **behavior and workflow semantics** of agent commands (shpeck-new, shpeck-sy
 - Language MUST be TypeScript.
 - Distribution MUST be an npm package (installable via `npm`, `pnpm`, or `bun`).
 
+### 2.1 Invocation (No `npx`/`bunx`)
+The package MUST expose a `shpeck` executable via the npm `bin` mechanism so users can invoke commands directly as `shpeck <command>` after a global install.
+
+The installed executable MUST run under Bun (for example via a `#!/usr/bin/env bun` shebang) and MAY use Bun-only APIs.
+
 ## 3. External Libraries
 The implementation MUST use these libraries (no substitutes):
 - CLI parsing: `commander`

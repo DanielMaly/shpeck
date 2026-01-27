@@ -13,7 +13,7 @@ Shpeck artifacts are a development aid, not a project artifact. They are intenti
 ## 2. Core Constraints & Rules
 1. **Git is required.** Shpeck assumes a git repo; verification/review relies on diffs.
 2. **Local-only artifacts.** `.spec/`, `.shpeck.toml`, and tool config directories are never committed.
-3. **Init must run once.** `npx shpeck init` must be run at least once in the repo root before other commands.
+3. **Init must run once.** `shpeck init` must be run at least once in the repo root before other commands.
 4. **Intent vs implementation authority (constrained).**
    - The external ticket is the authority for intent.
    - `ticket.md` is the local working copy of intent.
@@ -134,7 +134,7 @@ Shpeck has two interfaces:
 - CLI agent commands: everything else, named `shpeck-{action}`.
 
 ### 7.1 Local Bootstrap (Script)
-`shpeck init --tool=<tool-name> [--trunk=<trunk-branch>] [--replace]`:
+`shpeck init --tool <tool-name> [--trunk <trunk-branch>] [--replace]`:
 - Creates `.spec/` and `.shpeck.toml` if missing.
 - If `.shpeck.toml` is created by this run: sets `trunk_branch` to the provided value or defaults to `main`.
 - If `.shpeck.toml` already exists: sets `trunk_branch` only if `--trunk` is explicitly provided; otherwise does not modify `.shpeck.toml`.

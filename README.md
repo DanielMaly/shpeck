@@ -106,8 +106,23 @@ If the surprise changes *intent*, update `ticket.md` first (and ideally the exte
 ## Prerequisites
 
 - A git repository (Shpeck relies on diffs and branch management)
+- Bun (Shpeck is a Bun CLI)
 - An AI-powered coding agent (OpenCode, Claude Code, or similar)
 - Comfort with local-only, machine-specific development artifacts
+
+## Installation
+
+Global install via Bun (recommended):
+
+```bash
+bun install -g shpeck
+```
+
+Then run directly (no `npx`/`bunx`):
+
+```bash
+shpeck init --tool opencode
+```
 
 ## Strengths
 
