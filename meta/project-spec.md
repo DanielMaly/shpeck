@@ -50,7 +50,8 @@ Initializes Shpeck in the current repository.
 - `--tool <name>` is REQUIRED.
   - Valid values are exactly `opencode` and `claude`.
 - `--trunk <branch>` is OPTIONAL.
-  - Default value MUST be `main`.
+  - Default value MUST be `main` when `.shpeck.toml` is created by this run.
+  - If `.shpeck.toml` already exists and `--trunk` is not provided, `trunk_branch` MUST NOT be modified.
 - `--replace` is OPTIONAL.
   - When present, `shpeck init` MUST NOT prompt for confirmation when tool directory already exists.
 
@@ -64,7 +65,10 @@ Given `toolDir` determined from `--tool`:
   - The file MUST be valid TOML.
   - It MUST set `trunk_branch` to the resolved value of `--trunk`.
   - It MUST NOT set `active_context`.
-- If `.shpeck.toml` exists, the command MUST NOT modify it.
+- If `.shpeck.toml` exists:
+  - If `--trunk` is provided, the command MUST set `.shpeck.toml.trunk_branch` to that value.
+  - Otherwise, the command MUST NOT modify `.shpeck.toml`.
+  - Updates MUST preserve all other keys and values (including `active_context`).
 - If `.spec/` does not exist, the command MUST create it as a directory.
 - If `.spec/` exists, the command MUST NOT delete, rename, or modify any contents under it.
 
@@ -147,8 +151,9 @@ Displays current repo and Shpeck state.
 - Git branch:
   - MUST be obtained via `git rev-parse --abbrev-ref HEAD`.
 - Git working tree status:
-  - MUST be `clean` if `git status --porcelain` returns empty output.
+  - MUST be `clean` if `git status --porcelain --untracked-files=no` returns empty output.
   - MUST be `dirty` otherwise.
+  - Untracked files MUST be ignored when determining clean/dirty.
 
 #### 5.3.3 Output requirements
 - Default output MUST include:

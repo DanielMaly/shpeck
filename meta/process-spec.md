@@ -136,7 +136,8 @@ Shpeck has two interfaces:
 ### 7.1 Local Bootstrap (Script)
 `shpeck init --tool=<tool-name> [--trunk=<trunk-branch>]`:
 - Creates `.spec/` and `.shpeck.toml` if missing.
-- Sets `.shpeck.toml.trunk_branch` to the provided value or defaults to `main`.
+- If `.shpeck.toml` is created by this run: sets `trunk_branch` to the provided value or defaults to `main`.
+- If `.shpeck.toml` already exists: sets `trunk_branch` only if `--trunk` is explicitly provided; otherwise does not modify `.shpeck.toml`.
 - Writes tool rules/command definitions into `.<tool>/`.
 - Adds local-only ignore rules to `.git/info/exclude` for `.spec/`, `.shpeck.toml`, and `.<tool>/`.
 
