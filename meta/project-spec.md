@@ -40,6 +40,7 @@ Git operations MUST be implemented by spawning `git` subprocesses (no libgit2 bi
 - Tool directory:
   - `opencode` => `.opencode/`
   - `claude` => `.claude/`
+- Context name normalization: When deriving a context directory name from a ticket key, the implementation MUST convert the ticket key to lowercase. Example: `DDMUK-1234` becomes `ddmuk-1234`.
 - Protected paths: `.shpeck.toml` and `.spec/`.
   - These paths receive special handling during `shpeck init` (see Section 5.1.3).
   - `shpeck init` MUST NOT delete or replace these paths entirely.
