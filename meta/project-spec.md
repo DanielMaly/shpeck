@@ -7,12 +7,18 @@ Normative language: the terms MUST, MUST NOT, SHOULD, and MAY are used as descri
 ## 1. Scope
 `shpeck` is a local-only CLI tool that bootstraps and manages the Spec-Driven Development (SDD) workflow defined in `meta/process-spec.md`.
 
-This spec covers only the script commands:
-- `shpeck init`
-- `shpeck switch`
-- `shpeck status`
+This spec covers:
+1. **Script command implementation** (executed directly by the `shpeck` CLI):
+   - `shpeck init`
+   - `shpeck switch`
+   - `shpeck status`
 
-All other workflow behavior is defined in `meta/process-spec.md` and is out of scope for this document.
+2. **Package structure and asset distribution** for agent commands:
+   - Package contents (`pkg/` directory structure)
+   - Asset transformation and installation rules
+   - Tool-specific configuration file formats
+
+The **behavior and workflow semantics** of agent commands (shpeck-new, shpeck-sync, etc.) are defined in `meta/process-spec.md` and are out of scope for this document.
 
 ## 2. Technology
 - Runtime MUST be Bun.
@@ -34,7 +40,10 @@ Git operations MUST be implemented by spawning `git` subprocesses (no libgit2 bi
 - Tool directory:
   - `opencode` => `.opencode/`
   - `claude` => `.claude/`
-- Protected paths (MUST NOT be overwritten by `shpeck init`): `.shpeck.toml` and `.spec/`.
+- Protected paths: `.shpeck.toml` and `.spec/`.
+  - These paths receive special handling during `shpeck init` (see Section 5.1.3).
+  - `shpeck init` MUST NOT delete or replace these paths entirely.
+  - `shpeck init` MAY create or update individual settings within these paths as specified in Section 5.1.3.
 
 ## 5. Command Behavior
 
@@ -48,7 +57,8 @@ Initializes Shpeck in the current repository.
 
 #### 5.1.2 Arguments
 - `--tool <name>` is REQUIRED.
-  - Valid values are exactly `opencode` and `claude`.
+  - The value MUST be case-insensitive (e.g., `Opencode` is treated as `opencode`).
+  - Valid normalized values are exactly `opencode` and `claude`.
 - `--trunk <branch>` is OPTIONAL.
   - Default value MUST be `main` when `.shpeck.toml` is created by this run.
   - If `.shpeck.toml` already exists and `--trunk` is not provided, `trunk_branch` MUST NOT be modified.
@@ -61,16 +71,18 @@ Invalid flags or invalid values MUST cause a non-zero exit code.
 Given `toolDir` determined from `--tool`:
 
 1) Protected paths
-- If `.shpeck.toml` does not exist, the command MUST create it.
-  - The file MUST be valid TOML.
-  - It MUST set `trunk_branch` to the resolved value of `--trunk`.
-  - It MUST NOT set `active_context`.
-- If `.shpeck.toml` exists:
-  - If `--trunk` is provided, the command MUST set `.shpeck.toml.trunk_branch` to that value.
-  - Otherwise, the command MUST NOT modify `.shpeck.toml`.
-  - Updates MUST preserve all other keys and values (including `active_context`).
-- If `.spec/` does not exist, the command MUST create it as a directory.
-- If `.spec/` exists, the command MUST NOT delete, rename, or modify any contents under it.
+- `.shpeck.toml` handling:
+  - If `.shpeck.toml` does not exist, the command MUST create it.
+    - The file MUST be valid TOML.
+    - It MUST set `trunk_branch` to the resolved value of `--trunk`.
+    - It MUST NOT set `active_context`.
+  - If `.shpeck.toml` exists:
+    - If `--trunk` is provided, the command MUST update `trunk_branch` to that value.
+    - If `--trunk` is not provided, the command MUST NOT modify `.shpeck.toml`.
+    - Any updates MUST preserve all other keys and values (including `active_context`).
+- `.spec/` handling:
+  - If `.spec/` does not exist, the command MUST create it as an empty directory.
+  - If `.spec/` exists, the command MUST NOT delete, rename, or modify it or any of its contents.
 
 2) Tool assets
 - The package MUST ship a `pkg/` directory.
@@ -169,7 +181,7 @@ Displays current repo and Shpeck state.
   - For each context directory, it MUST report:
     - Context name
     - Context type (same rules as above)
-    - Directory modification time (mtime) in RFC3339
+    - Context modification time (mtime), which is the latest mtime of any file within the context directory (recursive).
 
 ## 6. Package Assets (`pkg/`)
 
@@ -243,8 +255,6 @@ MUST define:
 - `settings`: Content to merge into `.claude/settings.json`.
 
 The `settings.permissions.deny` array MUST include:
-- `"Edit(./.spec/**)"` 
-- `"Edit(./.shpeck.toml)"`
 - `"Bash(rm -rf .spec:*)"`
 - `"Bash(rm .spec:*)"`
 - `"Bash(rm -rf .shpeck.toml:*)"`

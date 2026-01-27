@@ -134,11 +134,13 @@ Shpeck has two interfaces:
 - CLI agent commands: everything else, named `shpeck-{action}`.
 
 ### 7.1 Local Bootstrap (Script)
-`shpeck init --tool=<tool-name> [--trunk=<trunk-branch>]`:
+`shpeck init --tool=<tool-name> [--trunk=<trunk-branch>] [--replace]`:
 - Creates `.spec/` and `.shpeck.toml` if missing.
 - If `.shpeck.toml` is created by this run: sets `trunk_branch` to the provided value or defaults to `main`.
 - If `.shpeck.toml` already exists: sets `trunk_branch` only if `--trunk` is explicitly provided; otherwise does not modify `.shpeck.toml`.
 - Writes tool rules/command definitions into `.<tool>/`.
+- **Note:** `<tool-name>` is case-insensitive (e.g. `Opencode`, `claude`).
+- **Interactive:** Prompts to merge/overwrite existing tool files unless `--replace` is used.
 - Adds local-only ignore rules to `.git/info/exclude` for `.spec/`, `.shpeck.toml`, and `.<tool>/`.
 
 `shpeck status`:
