@@ -89,6 +89,15 @@ Given `toolDir` determined from `--tool`:
 - `.spec/` handling:
   - If `.spec/` does not exist, the command MUST create it as an empty directory.
   - If `.spec/` exists, the command MUST NOT delete, rename, or modify it or any of its contents.
+- `.spec/.global/` handling:
+  - If `.spec/.global/` does not exist, the command MUST create it.
+  - The command MUST create the following stub files if they do not exist:
+    - `.spec/.global/conventions.md`
+    - `.spec/.global/architecture.md`
+    - `.spec/.global/tooling.md`
+    - `.spec/.global/gotchas.md`
+  - Each stub file MUST contain section headers and format instructions as defined in `meta/implementation-reference.md` Section 8.
+  - If a file already exists, the command MUST NOT modify it.
 
 2) Tool assets
 - The package MUST ship a `pkg/` directory.
@@ -218,6 +227,12 @@ pkg/
 
 - MUST contain markdown instructions for the AI assistant.
 - MUST be tool-agnostic (no tool-specific syntax).
+- MUST include the following sections (content defined in `meta/implementation-reference.md`):
+  - **TODO Discipline**: Rules for todo list usage on multi-step tasks
+  - **Global Codebase Context**: Instructions to read `.spec/.global/` files before starting work
+  - **LSP Tool Usage**: Mandate LSP tools over text manipulation for refactoring
+  - **Scope Discipline**: Anti-patterns table and bugfix rule to prevent scope creep
+  - **Updating Global Learnings**: Instructions for appending to `.spec/.global/` files
 
 ### 6.3 Command Files (`pkg/commands/*.md`)
 
