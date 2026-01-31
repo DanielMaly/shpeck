@@ -1,8 +1,6 @@
 import deepEqual from "fast-deep-equal";
 
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+import { isPlainObject } from "./object";
 
 function dedupeArray(values: unknown[]): unknown[] {
   const out: unknown[] = [];

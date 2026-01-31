@@ -4,5 +4,6 @@ export * from "./frontmatter";
 export * from "./git";
 export * from "./json";
 export * from "./merge";
+export * from "./object";
 export * from "./repo";
 export * from "./toml";

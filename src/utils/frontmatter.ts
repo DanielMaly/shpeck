@@ -1,9 +1,7 @@
 import matter from "gray-matter";
 import YAML from "yaml";
 
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+import { isPlainObject } from "./object";
 
 const MATTER_OPTIONS = {
   engines: {
