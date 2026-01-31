@@ -3,13 +3,13 @@
   - Add `tsconfig.json` and a build strategy (`bun build` or Bun-run TS with shebang)
   - Create initial `src/` layout (CLI entry + command modules)
 
-- [ ] 2. Add required runtime deps and choose supporting parsers
+- [x] 2. Add required runtime deps and choose supporting parsers
   - Install required: `commander`, `inquirer`
   - Decide + add: TOML parse/stringify (prefer Bun's TOML if available; otherwise a TOML lib)
   - Decide + add: YAML frontmatter parse/stringify (for command file transforms)
   - Decide + add: deep-equality helper (for array dedupe during settings merge)
 
-- [ ] 3. Implement core utilities (used by all commands)
+- [x] 3. Implement core utilities (used by all commands)
   - Git runner: spawn `git ...`, capture stdout/stderr, consistent error handling/exit codes
   - Repo-root enforcement: `git rev-parse --show-toplevel` + realpath comparison to `process.cwd()`
   - FS helpers: `ensureDir`, safe read/write, recursive directory walk + recursive mtime
@@ -17,12 +17,17 @@
   - YAML frontmatter helpers: parse existing frontmatter, merge, serialize
   - Unit tests (implemented in step 8): deep-merge/dedupe, frontmatter roundtrips, repo-root check
 
-- [ ] 4. Implement the `shpeck` CLI shell (commander)
+- [ ] 4. Set up formatting/linting (Biome)
+  - Add Biome dev dependency + config
+  - Add scripts: `lint`, `format`, `format:check`
+  - Ensure `lint` and `typecheck` are fast enough for CI
+
+- [ ] 5. Implement the `shpeck` CLI shell (commander)
   - Register subcommands: `init`, `switch`, `status`
   - Centralize error formatting + non-zero exit behavior on failures/invalid flags
   - Smoke tests (implemented in step 8): `--help` renders; unknown command exits non-zero
 
-- [ ] 5. Implement `shpeck init` end-to-end (per `meta/project-spec.md` Section 5.1 + Section 7)
+- [ ] 6. Implement `shpeck init` end-to-end (per `meta/project-spec.md` Section 5.1 + Section 7)
   - Preconditions: enforce running at repo root
   - Protected paths:
     - Create `.spec/` if missing; never delete/replace/modify existing contents
@@ -49,7 +54,7 @@
       - Writes/overwrites non-settings files; merges settings (preserve scalars/arrays)
     - `.git/info/exclude` idempotent (no duplicates) and `.gitignore` untouched
 
-- [ ] 6. Implement `shpeck switch [context_name]` (per `meta/project-spec.md` Section 5.2)
+- [ ] 7. Implement `shpeck switch [context_name]` (per `meta/project-spec.md` Section 5.2)
   - Preconditions: enforce repo root; require `.shpeck.toml` and `.spec/`
   - With arg: verify `.spec/<context_name>/` exists; update `.shpeck.toml.active_context`
   - Without arg: list direct child dirs of `.spec/` alphabetically; prompt via `inquirer`; update `.shpeck.toml`
@@ -59,7 +64,7 @@
     - With arg: missing context dir fails; existing sets `active_context`
     - Without arg: lists directories alphabetically and sets selection (inquirer stub)
 
-- [ ] 7. Implement `shpeck status [--all]` (per `meta/project-spec.md` Section 5.3)
+- [ ] 8. Implement `shpeck status [--all]` (per `meta/project-spec.md` Section 5.3)
   - Preconditions: enforce repo root
   - Default output fields:
     - Active context (or `none`)
@@ -74,13 +79,32 @@
     - Git status clean/dirty ignores untracked
     - `--all` ordering + recursive mtime correctness
 
-- [ ] 8. Add tests (unit + integration + smoke)
+- [ ] 9. Add tests (unit + integration + smoke)
   - Use Bun's test runner (`bun test`)
   - Implement the unit/smoke tests referenced in steps 3-4
-  - Implement the integration tests referenced in steps 5-7 (temp git repos)
-  - Add packaging smoke test(s) referenced in step 9
+  - Implement the integration tests referenced in steps 6-8 (temp git repos)
+  - Add packaging smoke test(s) referenced in step 10
 
-- [ ] 9. Packaging verification
+- [ ] 10. Packaging verification
   - Ensure built artifact + `pkg/` directory are included in the published npm package
   - Sanity-check a global install flow and direct invocation as `shpeck <command>` under Bun
-  - Smoke test: `npm pack` includes `bin/`, `src/`/build output (as applicable), and `pkg/`
+  - Smoke test: run `npm pack` (even though runtime is Bun) and verify the tarball includes `bin/`, `src/`/build output (as applicable), and `pkg/`
+
+- [ ] 11. GitHub Actions CI (branches + PRs)
+  - Add `.github/workflows/ci.yml`
+  - Triggers: pull_request + push to main
+  - Jobs:
+    - Install deps (`bun install`)
+    - Lint (`bun run lint`)
+    - Typecheck (`bun run typecheck`)
+    - Tests (`bun test`)
+
+- [ ] 12. Publishing + releases (Changesets)
+  - Add Changesets config (`npx changeset init`)
+  - Add a release workflow on main using `changesets/action`
+  - Workflow behavior:
+    - On PRs: use `changeset` files as the source of truth for versioning
+    - On main: open/maintain a "Version Packages" PR that updates versions + CHANGELOG
+    - When that PR is merged: tag from main, generate changelog, and publish to registry
+  - Secrets:
+    - `NPM_TOKEN` for publishing
