@@ -1,0 +1,86 @@
+- [x] 1. Create Bun/TypeScript npm package scaffold
+  - Add `package.json` with `bin: { "shpeck": ... }`, Bun-compatible entrypoint, and publish config
+  - Add `tsconfig.json` and a build strategy (`bun build` or Bun-run TS with shebang)
+  - Create initial `src/` layout (CLI entry + command modules)
+
+- [ ] 2. Add required runtime deps and choose supporting parsers
+  - Install required: `commander`, `inquirer`
+  - Decide + add: TOML parse/stringify (prefer Bun's TOML if available; otherwise a TOML lib)
+  - Decide + add: YAML frontmatter parse/stringify (for command file transforms)
+  - Decide + add: deep-equality helper (for array dedupe during settings merge)
+
+- [ ] 3. Implement core utilities (used by all commands)
+  - Git runner: spawn `git ...`, capture stdout/stderr, consistent error handling/exit codes
+  - Repo-root enforcement: `git rev-parse --show-toplevel` + realpath comparison to `process.cwd()`
+  - FS helpers: `ensureDir`, safe read/write, recursive directory walk + recursive mtime
+  - TOML helpers: read/modify/write while preserving unknown keys (no-write when spec says "MUST NOT modify")
+  - YAML frontmatter helpers: parse existing frontmatter, merge, serialize
+  - Unit tests (implemented in step 8): deep-merge/dedupe, frontmatter roundtrips, repo-root check
+
+- [ ] 4. Implement the `shpeck` CLI shell (commander)
+  - Register subcommands: `init`, `switch`, `status`
+  - Centralize error formatting + non-zero exit behavior on failures/invalid flags
+  - Smoke tests (implemented in step 8): `--help` renders; unknown command exits non-zero
+
+- [ ] 5. Implement `shpeck init` end-to-end (per `meta/project-spec.md` Section 5.1 + Section 7)
+  - Preconditions: enforce running at repo root
+  - Protected paths:
+    - Create `.spec/` if missing; never delete/replace/modify existing contents
+    - Create `.spec/.global/` and stub files if missing (templates from `meta/implementation-reference.md` Section 8); never overwrite existing
+    - Create/update `.shpeck.toml` per rules (create: set `trunk_branch`, omit `active_context`; update trunk only if `--trunk`)
+  - Tool assets install:
+    - Validate `--tool` (`opencode|claude`), handle `--replace`
+    - Detect whether any destination files already exist; prompt exactly as spec requires (or skip prompt with `--replace`)
+    - Copy instructions file to tool-specific location (no modification)
+    - Transform/copy command files using tool-config frontmatter rules
+    - Merge settings JSON into the tool settings file using the deep-merge + dedupe rules
+    - Never delete/rename `toolDir` or anything under it
+  - Git exclude:
+    - Ensure `.git/info/exclude` exists
+    - Idempotently add `.spec/`, `.shpeck.toml`, and the tool dir line (no duplicates)
+    - Must not modify `.gitignore`
+  - Note: implement the installer to read from `pkg/`, but do not author the real `pkg/commands/*.md` prompt bodies yet (use test fixtures or placeholder assets only)
+  - Integration tests (temp git repos):
+    - Enforces repo root precondition (non-root fails)
+    - Creates `.spec/` and `.spec/.global/*` stubs only when missing; never overwrites
+    - Creates `.shpeck.toml` with `trunk_branch` and no `active_context`; updates trunk only with `--trunk`
+    - Tool asset install:
+      - `--replace` skips prompt; without `--replace` prompt gating works
+      - Writes/overwrites non-settings files; merges settings (preserve scalars/arrays)
+    - `.git/info/exclude` idempotent (no duplicates) and `.gitignore` untouched
+
+- [ ] 6. Implement `shpeck switch [context_name]` (per `meta/project-spec.md` Section 5.2)
+  - Preconditions: enforce repo root; require `.shpeck.toml` and `.spec/`
+  - With arg: verify `.spec/<context_name>/` exists; update `.shpeck.toml.active_context`
+  - Without arg: list direct child dirs of `.spec/` alphabetically; prompt via `inquirer`; update `.shpeck.toml`
+  - Preserve all other TOML keys/values
+  - Integration tests (temp git repos):
+    - Missing `.shpeck.toml` or `.spec/` fails with guidance to run `shpeck init`
+    - With arg: missing context dir fails; existing sets `active_context`
+    - Without arg: lists directories alphabetically and sets selection (inquirer stub)
+
+- [ ] 7. Implement `shpeck status [--all]` (per `meta/project-spec.md` Section 5.3)
+  - Preconditions: enforce repo root
+  - Default output fields:
+    - Active context (or `none`)
+    - Context type from `.spec/<ctx>/context.toml` (or `unknown`)
+    - Spec version from first line of `.spec/<ctx>/spec.md` (or `unknown`/`none` per rules)
+    - Last plan timestamp from mtime of `.spec/<ctx>/.dev/plan.md` (or `none`)
+    - Git branch and clean/dirty (ignore untracked)
+  - `--all`: list all `.spec/` child dirs alphabetically with type + recursive mtime
+  - Integration tests (temp git repos):
+    - No `.shpeck.toml` => active context `none`
+    - Spec version parsing (`Version: N` first line) + invalid/missing cases
+    - Git status clean/dirty ignores untracked
+    - `--all` ordering + recursive mtime correctness
+
+- [ ] 8. Add tests (unit + integration + smoke)
+  - Use Bun's test runner (`bun test`)
+  - Implement the unit/smoke tests referenced in steps 3-4
+  - Implement the integration tests referenced in steps 5-7 (temp git repos)
+  - Add packaging smoke test(s) referenced in step 9
+
+- [ ] 9. Packaging verification
+  - Ensure built artifact + `pkg/` directory are included in the published npm package
+  - Sanity-check a global install flow and direct invocation as `shpeck <command>` under Bun
+  - Smoke test: `npm pack` includes `bin/`, `src/`/build output (as applicable), and `pkg/`
