@@ -15,19 +15,31 @@
   - FS helpers: `ensureDir`, safe read/write, recursive directory walk + recursive mtime
   - TOML helpers: read/modify/write while preserving unknown keys (no-write when spec says "MUST NOT modify")
   - YAML frontmatter helpers: parse existing frontmatter, merge, serialize
-  - Unit tests (implemented in step 8): deep-merge/dedupe, frontmatter roundtrips, repo-root check
+e  - Unit tests: implemented in new Step 5 (deep-merge/dedupe, frontmatter roundtrips, repo-root check)
 
 - [ ] 4. Set up formatting/linting (Biome)
   - Add Biome dev dependency + config
   - Add scripts: `lint`, `format`, `format:check`
+  - Add pre-commit hook to always check formatting before commits
   - Ensure `lint` and `typecheck` are fast enough for CI
 
-- [ ] 5. Implement the `shpeck` CLI shell (commander)
+- [ ] 5. Set up unit test suite + backfill unit tests for existing utilities
+  - Use Bun's test runner (`bun test`)
+  - Add test folder layout + helpers (tmp dirs, fixtures)
+  - Add `test` script
+  - Unit tests for existing pure utilities (and keep adding unit tests as we go):
+    - Deep-merge rules + array dedupe (including nested arrays/objects)
+    - Frontmatter parse/merge/stringify roundtrips
+    - Repo-root enforcement behavior (path equality and failure cases)
+    - JSON helpers (parse error context, stringify formatting)
+    - isPlainObject
+
+- [ ] 6. Implement the `shpeck` CLI shell (commander)
   - Register subcommands: `init`, `switch`, `status`
   - Centralize error formatting + non-zero exit behavior on failures/invalid flags
-  - Smoke tests (implemented in step 8): `--help` renders; unknown command exits non-zero
+  - Smoke tests: `--help` renders; unknown command exits non-zero
 
-- [ ] 6. Implement `shpeck init` end-to-end (per `meta/project-spec.md` Section 5.1 + Section 7)
+- [ ] 7. Implement `shpeck init` end-to-end (per `meta/project-spec.md` Section 5.1 + Section 7)
   - Preconditions: enforce running at repo root
   - Protected paths:
     - Create `.spec/` if missing; never delete/replace/modify existing contents
@@ -54,7 +66,7 @@
       - Writes/overwrites non-settings files; merges settings (preserve scalars/arrays)
     - `.git/info/exclude` idempotent (no duplicates) and `.gitignore` untouched
 
-- [ ] 7. Implement `shpeck switch [context_name]` (per `meta/project-spec.md` Section 5.2)
+- [ ] 8. Implement `shpeck switch [context_name]` (per `meta/project-spec.md` Section 5.2)
   - Preconditions: enforce repo root; require `.shpeck.toml` and `.spec/`
   - With arg: verify `.spec/<context_name>/` exists; update `.shpeck.toml.active_context`
   - Without arg: list direct child dirs of `.spec/` alphabetically; prompt via `inquirer`; update `.shpeck.toml`
@@ -64,7 +76,13 @@
     - With arg: missing context dir fails; existing sets `active_context`
     - Without arg: lists directories alphabetically and sets selection (inquirer stub)
 
-- [ ] 8. Implement `shpeck status [--all]` (per `meta/project-spec.md` Section 5.3)
+- [ ] 9. Add integration tests and additional test coverage
+  - Implement the integration tests referenced in steps 7-8 (temp git repos)
+  - Add CLI smoke tests referenced in step 6 (if not already covered)
+  - Add packaging smoke test(s) referenced in step 11
+  - Note: unit tests for utilities are implemented in Step 5
+
+- [ ] 10. Implement `shpeck status [--all]` (per `meta/project-spec.md` Section 5.3)
   - Preconditions: enforce repo root
   - Default output fields:
     - Active context (or `none`)
@@ -79,18 +97,12 @@
     - Git status clean/dirty ignores untracked
     - `--all` ordering + recursive mtime correctness
 
-- [ ] 9. Add tests (unit + integration + smoke)
-  - Use Bun's test runner (`bun test`)
-  - Implement the unit/smoke tests referenced in steps 3-4
-  - Implement the integration tests referenced in steps 6-8 (temp git repos)
-  - Add packaging smoke test(s) referenced in step 10
-
-- [ ] 10. Packaging verification
+- [ ] 11. Packaging verification
   - Ensure built artifact + `pkg/` directory are included in the published npm package
   - Sanity-check a global install flow and direct invocation as `shpeck <command>` under Bun
   - Smoke test: run `npm pack` (even though runtime is Bun) and verify the tarball includes `bin/`, `src/`/build output (as applicable), and `pkg/`
 
-- [ ] 11. GitHub Actions CI (branches + PRs)
+- [ ] 12. GitHub Actions CI (branches + PRs)
   - Add `.github/workflows/ci.yml`
   - Triggers: pull_request + push to main
   - Jobs:
@@ -99,7 +111,7 @@
     - Typecheck (`bun run typecheck`)
     - Tests (`bun test`)
 
-- [ ] 12. Publishing + releases (Changesets)
+- [ ] 13. Publishing + releases (Changesets)
   - Add Changesets config (`npx changeset init`)
   - Add a release workflow on main using `changesets/action`
   - Workflow behavior:
