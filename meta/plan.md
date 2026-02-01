@@ -17,13 +17,13 @@
   - YAML frontmatter helpers: parse existing frontmatter, merge, serialize
 e  - Unit tests: implemented in new Step 5 (deep-merge/dedupe, frontmatter roundtrips, repo-root check)
 
-- [ ] 4. Set up formatting/linting (Biome)
+- [x] 4. Set up formatting/linting (Biome)
   - Add Biome dev dependency + config
   - Add scripts: `lint`, `format`, `format:check`
   - Add pre-commit hook to always check formatting before commits
   - Ensure `lint` and `typecheck` are fast enough for CI
 
-- [ ] 5. Set up unit test suite + backfill unit tests for existing utilities
+- [x] 5. Set up unit test suite + backfill unit tests for existing utilities
   - Use Bun's test runner (`bun test`)
   - Add test folder layout + helpers (tmp dirs, fixtures)
   - Add `test` script
