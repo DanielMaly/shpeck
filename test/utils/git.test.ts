@@ -25,21 +25,22 @@ describe('git', () => {
   })
 
   test('runGit throws GitError on non-zero exit by default', async () => {
-    const promise = runGit(['rev-parse', '--verify', 'refs/heads/this-branch-does-not-exist'], {
-      cwd: dir,
-    })
-    await expect(promise).rejects.toBeInstanceOf(GitError)
-
+    let err: unknown
     try {
-      await promise
-    } catch (err) {
-      const ge = err as GitError
-      expect(ge.exitCode).not.toBe(0)
-      expect(ge.cwd).toBe(dir)
-      expect(ge.args).toEqual(['rev-parse', '--verify', 'refs/heads/this-branch-does-not-exist'])
-      expect(ge.message).toContain('git rev-parse --verify refs/heads/this-branch-does-not-exist')
-      expect(ge.message).toContain(`cwd: ${dir}`)
+      await runGit(['rev-parse', '--verify', 'refs/heads/this-branch-does-not-exist'], {
+        cwd: dir,
+      })
+    } catch (e) {
+      err = e
     }
+
+    expect(err).toBeInstanceOf(GitError)
+    const ge = err as GitError
+    expect(ge.exitCode).not.toBe(0)
+    expect(ge.cwd).toBe(dir)
+    expect(ge.args).toEqual(['rev-parse', '--verify', 'refs/heads/this-branch-does-not-exist'])
+    expect(ge.message).toContain('git rev-parse --verify refs/heads/this-branch-does-not-exist')
+    expect(ge.message).toContain(`cwd: ${dir}`)
   })
 
   test('runGit does not throw when allowNonZeroExit is set', async () => {
