@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { mkdir, realpath } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { ShpeckError } from '../../src/utils/errors'
-import { assertRepoRoot, getRepoRoot } from '../../src/utils/repo'
+import { ShpeckError } from '../../src/utils'
+import { assertRepoRoot, getRepoRoot } from '../../src/utils'
 import { runCommand } from '../_helpers/exec'
 import { createTempDir, removeTempDir } from '../_helpers/tmp'
 
@@ -28,7 +28,7 @@ describe('repo', () => {
   })
 
   test('assertRepoRoot passes in repo root', async () => {
-    await expect(assertRepoRoot()).resolves.toEqual({ repoRoot: dir, cwd: dir })
+    expect(assertRepoRoot()).resolves.toEqual({ repoRoot: dir, cwd: dir })
   })
 
   test('assertRepoRoot throws when cwd is not repo root', async () => {
@@ -36,7 +36,7 @@ describe('repo', () => {
     await mkdir(subdir)
     process.chdir(subdir)
 
-    await expect(assertRepoRoot()).rejects.toBeInstanceOf(ShpeckError)
-    await expect(assertRepoRoot()).rejects.toThrow('Command must run in repo root.')
+    expect(assertRepoRoot()).rejects.toBeInstanceOf(ShpeckError)
+    expect(assertRepoRoot()).rejects.toThrow('Command must run in repo root.')
   })
 })

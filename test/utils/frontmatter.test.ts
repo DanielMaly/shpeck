@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { applyFrontmatter, parseMarkdownWithFrontmatter } from '../../src/utils/frontmatter'
+import { applyFrontmatter, parseMarkdownWithFrontmatter } from '../../src/utils'
 
 describe('frontmatter', () => {
   test('parses existing frontmatter', () => {

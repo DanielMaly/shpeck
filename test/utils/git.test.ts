@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { realpath } from 'node:fs/promises'
 
-import { GitError, runGit } from '../../src/utils/git'
+import { GitError, runGit } from '../../src/utils'
 import { runCommand } from '../_helpers/exec'
 import { createTempDir, removeTempDir } from '../_helpers/tmp'
 

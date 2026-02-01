@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { ShpeckError } from '../../src/utils/errors'
-import { parseJson, stringifyJson } from '../../src/utils/json'
+import { ShpeckError } from '../../src/utils'
+import { parseJson, stringifyJson } from '../../src/utils'
 
 describe('json', () => {
   test('stringifyJson formats with 2 spaces and trailing newline', () => {

@@ -24,4 +24,14 @@ describe('cli smoke', () => {
     expect(exitCode).toBeGreaterThan(0)
     expect(stderr.length).toBeGreaterThan(0)
   })
+
+  it('fails if init is called without --tool', async () => {
+    const { exitCode, stderr } = await runCommand(['bun', cliPath, 'init'], {
+      cwd: repoRoot,
+      allowNonZeroExit: true,
+    })
+
+    expect(exitCode).toBeGreaterThan(0)
+    expect(stderr).toContain("required option '--tool <name>' not specified")
+  })
 })

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { deepMerge } from '../../src/utils/merge'
+import { deepMerge } from '../../src/utils'
 
 describe('deepMerge', () => {
   test('keeps target scalar when defined', () => {

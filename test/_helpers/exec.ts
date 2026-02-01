@@ -1,12 +1,20 @@
+/// <reference types="bun-types" />
+
 export async function runCommand(
   argv: string[],
-  opts: { cwd: string; allowNonZeroExit?: boolean }
+  opts: { cwd: string; allowNonZeroExit?: boolean; stdin?: string }
 ): Promise<{ exitCode: number; stdout: string; stderr: string }> {
   const proc = Bun.spawn(argv, {
     cwd: opts.cwd,
+    ...(opts.stdin ? { stdin: 'pipe' } : {}),
     stdout: 'pipe',
     stderr: 'pipe',
   })
+
+  if (opts.stdin) {
+    proc.stdin.write(opts.stdin)
+    proc.stdin.end()
+  }
 
   const stdoutPromise = new Response(proc.stdout).text()
   const stderrPromise = new Response(proc.stderr).text()

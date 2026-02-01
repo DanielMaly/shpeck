@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 import { mkdir, writeFile, utimes } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { getRecursiveMtimeMs, walkFilesRecursive } from '../../src/utils/fs'
+import { getRecursiveMtimeMs, walkFilesRecursive } from '../../src/utils'
 import { createTempDir, removeTempDir } from '../_helpers/tmp'
 
 describe('fs', () => {

@@ -1,0 +1,45 @@
+{
+  "frontmatter": {
+    "shpeck-new": {
+      "description": "Create a new Shpeck context (Claude)",
+      "disable-model-invocation": true
+    },
+    "shpeck-sync": {
+      "disable-model-invocation": true
+    },
+    "shpeck-refine": {
+      "disable-model-invocation": true
+    },
+    "shpeck-spec": {
+      "disable-model-invocation": true
+    },
+    "shpeck-plan": {
+      "disable-model-invocation": true
+    },
+    "shpeck-code": {
+      "disable-model-invocation": true
+    },
+    "shpeck-diagnose": {
+      "disable-model-invocation": true
+    },
+    "shpeck-verify": {
+      "disable-model-invocation": true
+    },
+    "shpeck-explain": {
+      "disable-model-invocation": true
+    },
+    "shpeck-promote": {
+      "disable-model-invocation": true
+    }
+  },
+  "settings": {
+    "permissions": {
+      "deny": [
+        "Bash(rm -rf .spec:*)",
+        "Bash(rm .spec:*)",
+        "Bash(rm -rf .shpeck.toml:*)",
+        "Bash(rm .shpeck.toml:*)"
+      ]
+    }
+  }
+}

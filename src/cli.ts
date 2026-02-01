@@ -2,15 +2,8 @@ import { Command, CommanderError } from 'commander'
 import { runInit } from './commands/init'
 import { runStatus } from './commands/status'
 import { runSwitch } from './commands/switch'
-import { ShpeckError, toErrorMessage } from './utils/errors'
-import { GitError } from './utils/git'
-
-const toolChoices = ['opencode', 'claude'] as const
-type ToolChoice = (typeof toolChoices)[number]
-
-function isToolChoice(value: string): value is ToolChoice {
-  return toolChoices.includes(value as ToolChoice)
-}
+import { type ToolChoice, isToolChoice } from './types/tool-choice'
+import { GitError, ShpeckError, toErrorMessage } from './utils'
 
 function normalizeTool(value: string): ToolChoice {
   const normalized = value.toLowerCase()

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { ShpeckError } from '../../src/utils/errors'
-import { parseToml, upsertTopLevelTomlString } from '../../src/utils/toml'
+import { ShpeckError } from '../../src/utils'
+import { parseToml, upsertTopLevelTomlString } from '../../src/utils'
 
 describe('toml', () => {
   test('upserts an existing top-level string key and preserves comments', () => {

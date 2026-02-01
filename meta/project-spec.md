@@ -206,7 +206,7 @@ The npm package MUST include a top-level directory `pkg/`.
 
 ```
 pkg/
-├── AGENTS.md
+├── shpeck-rules.md
 ├── commands/
 │   ├── shpeck-new.md
 │   ├── shpeck-sync.md
@@ -223,7 +223,7 @@ pkg/
     └── claude.json
 ```
 
-### 6.2 Instructions File (`pkg/AGENTS.md`)
+### 6.2 Rules File (`pkg/shpeck-rules.md`)
 
 - MUST contain markdown instructions for the AI assistant.
 - MUST be tool-agnostic (no tool-specific syntax).
@@ -266,7 +266,7 @@ MUST define:
 
 The `settings` object MUST include:
 - `"$schema": "https://opencode.ai/config.json"`
-- `"instructions"` array referencing `.opencode/AGENTS.md`
+- `"instructions"` array referencing `.opencode/shpeck-rules.md`
 - `"watcher.ignore"` array containing `.spec/**`
 
 #### 6.4.2 `pkg/tool-config/claude.json`
@@ -285,14 +285,16 @@ The `settings.permissions.deny` array MUST include:
 
 This section specifies how `shpeck init` transforms and copies assets from `pkg/` to the tool directory.
 
-### 7.1 Instructions File
+### 7.1 Rules File
 
 | Tool | Source | Destination |
 |------|--------|-------------|
-| `opencode` | `pkg/AGENTS.md` | `.opencode/AGENTS.md` |
-| `claude` | `pkg/AGENTS.md` | `.claude/CLAUDE.md` |
+| `opencode` | `pkg/shpeck-rules.md` | `.opencode/shpeck-rules.md` |
+| `claude` | `pkg/shpeck-rules.md` | `.claude/shpeck-rules.md` |
 
 The file MUST be copied without modification.
+
+For Claude, `CLAUDE.local.md` is the local-scope instructions file that Claude Code automatically loads but does not commit to git. The command MUST add a reference line to `CLAUDE.local.md` that points at `.claude/shpeck-rules.md`, and MUST also add `CLAUDE.local.md` to `.git/info/exclude`.
 
 ### 7.2 Command Files
 
