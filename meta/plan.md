@@ -1,4 +1,4 @@
-- [x] 1. Create Bun/TypeScript npm package scaffold
+-model_cycle_favoritemodel_cycle_favorite [x] 1. Create Bun/TypeScript npm package scaffold
   - Add `package.json` with `bin: { "shpeck": ... }`, Bun-compatible entrypoint, and publish config
   - Add `tsconfig.json` and a build strategy (`bun build` or Bun-run TS with shebang)
   - Create initial `src/` layout (CLI entry + command modules)
@@ -15,7 +15,7 @@
   - FS helpers: `ensureDir`, safe read/write, recursive directory walk + recursive mtime
   - TOML helpers: read/modify/write while preserving unknown keys (no-write when spec says "MUST NOT modify")
   - YAML frontmatter helpers: parse existing frontmatter, merge, serialize
-e  - Unit tests: implemented in new Step 5 (deep-merge/dedupe, frontmatter roundtrips, repo-root check)
+  - Unit tests: implemented in new Step 5 (deep-merge/dedupe, frontmatter roundtrips, repo-root check)
 
 - [x] 4. Set up formatting/linting (Biome)
   - Add Biome dev dependency + config
@@ -66,7 +66,7 @@ e  - Unit tests: implemented in new Step 5 (deep-merge/dedupe, frontmatter round
       - Writes/overwrites non-settings files; merges settings (preserve scalars/arrays)
     - `.git/info/exclude` idempotent (no duplicates) and `.gitignore` untouched
 
-- [ ] 8. Implement `shpeck switch [context_name]` (per `meta/project-spec.md` Section 5.2)
+- [x] 8. Implement `shpeck switch [context_name]` (per `meta/project-spec.md` Section 5.2)
   - Preconditions: enforce repo root; require `.shpeck.toml` and `.spec/`
   - With arg: verify `.spec/<context_name>/` exists; update `.shpeck.toml.active_context`
   - Without arg: list direct child dirs of `.spec/` alphabetically; prompt via `inquirer`; update `.shpeck.toml`
