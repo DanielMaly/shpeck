@@ -34,12 +34,12 @@ e  - Unit tests: implemented in new Step 5 (deep-merge/dedupe, frontmatter round
     - JSON helpers (parse error context, stringify formatting)
     - isPlainObject
 
-- [ ] 6. Implement the `shpeck` CLI shell (commander)
+- [x] 6. Implement the `shpeck` CLI shell (commander)
   - Register subcommands: `init`, `switch`, `status`
   - Centralize error formatting + non-zero exit behavior on failures/invalid flags
   - Smoke tests: `--help` renders; unknown command exits non-zero
 
-- [ ] 7. Implement `shpeck init` end-to-end (per `meta/project-spec.md` Section 5.1 + Section 7)
+- [x] 7. Implement `shpeck init` end-to-end (per `meta/project-spec.md` Section 5.1 + Section 7)
   - Preconditions: enforce running at repo root
   - Protected paths:
     - Create `.spec/` if missing; never delete/replace/modify existing contents
