@@ -7,7 +7,10 @@
     "shpeck": "bin/shpeck.ts"
   },
   "scripts": {
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "biome lint",
+    "format": "biome format --write",
+    "format:check": "biome format"
   },
   "dependencies": {
     "commander": "^12.1.0",
@@ -17,6 +20,7 @@
     "yaml": "^2.4.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "bun-types": "^1.1.0",
     "typescript": "^5.4.0"
   },

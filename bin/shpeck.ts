@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
 
-import { main } from "../src/cli";
+import { main } from '../src/cli'
 
-await main(process.argv);
+await main(process.argv)
