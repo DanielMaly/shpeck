@@ -82,7 +82,7 @@
   - Add packaging smoke test(s) referenced in step 11
   - Note: unit tests for utilities are implemented in Step 5
 
-- [ ] 10. Implement `shpeck status [--all]` (per `meta/project-spec.md` Section 5.3)
+- [x] 10. Implement `shpeck status [--all]` (per `meta/project-spec.md` Section 5.3)
   - Preconditions: enforce repo root
   - Default output fields:
     - Active context (or `none`)
