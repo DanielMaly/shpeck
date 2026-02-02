@@ -97,7 +97,7 @@
     - Git status clean/dirty ignores untracked
     - `--all` ordering + recursive mtime correctness
 
-- [ ] 11. Packaging verification
+- [x] 11. Packaging verification
   - Ensure built artifact + `pkg/` directory are included in the published npm package
   - Sanity-check a global install flow and direct invocation as `shpeck <command>` under Bun
   - Smoke test: run `npm pack` (even though runtime is Bun) and verify the tarball includes `bin/`, `src/`/build output (as applicable), and `pkg/`

@@ -6,6 +6,7 @@
   "bin": {
     "shpeck": "bin/shpeck.ts"
   },
+  "files": ["bin/", "src/", "pkg/", "README.md"],
   "scripts": {
     "test": "bun test",
     "typecheck": "tsc -p tsconfig.json",
