@@ -102,7 +102,7 @@
   - Sanity-check a global install flow and direct invocation as `shpeck <command>` under Bun
   - Smoke test: run `npm pack` (even though runtime is Bun) and verify the tarball includes `bin/`, `src/`/build output (as applicable), and `pkg/`
 
-- [ ] 12. GitHub Actions CI (branches + PRs)
+- [x] 12. GitHub Actions CI (branches + PRs)
   - Add `.github/workflows/ci.yml`
   - Triggers: pull_request + push to main
   - Jobs:
@@ -111,7 +111,7 @@
     - Typecheck (`bun run typecheck`)
     - Tests (`bun test`)
 
-- [ ] 13. Publishing + releases (Changesets)
+- [x] 13. Publishing + releases (Changesets)
   - Add Changesets config (`npx changeset init`)
   - Add a release workflow on main using `changesets/action`
   - Workflow behavior:
