@@ -76,7 +76,7 @@
     - With arg: missing context dir fails; existing sets `active_context`
     - Without arg: lists directories alphabetically and sets selection (inquirer stub)
 
-- [ ] 9. Add integration tests and additional test coverage
+- [x] 9. Add integration tests and additional test coverage
   - Implement the integration tests referenced in steps 7-8 (temp git repos)
   - Add CLI smoke tests referenced in step 6 (if not already covered)
   - Add packaging smoke test(s) referenced in step 11
