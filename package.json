@@ -6,7 +6,7 @@
   "bin": {
     "shpeck": "bin/shpeck.ts"
   },
-  "files": ["bin/", "src/", "pkg/", "README.md"],
+  "files": ["bin/", "src/", "pkg/", "README.md", "LICENSE"],
   "scripts": {
     "test": "bun test",
     "typecheck": "tsc -p tsconfig.json",
@@ -29,5 +29,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "license": "MIT"
+  "license": "GPL-3.0-only"
 }
