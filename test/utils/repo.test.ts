@@ -14,6 +14,8 @@ describe('repo', () => {
   beforeEach(async () => {
     dir = await realpath(await createTempDir())
     await runCommand(['git', 'init', '-q'], { cwd: dir })
+    await runCommand(['git', 'config', 'user.email', 'you@example.com'], { cwd: dir })
+    await runCommand(['git', 'config', 'user.name', 'Your Name'], { cwd: dir })
     process.chdir(dir)
   })
 
