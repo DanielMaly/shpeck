@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+bun run format:check
+bun run lint

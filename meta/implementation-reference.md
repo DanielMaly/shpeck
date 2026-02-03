@@ -1,14 +1,14 @@
 # Shpeck: Implementation Reference
 
-This document provides detailed content blocks that MUST be included in command files (`pkg/commands/*.md`) and agent instructions (`pkg/AGENTS.md`) when they are implemented.
+This document provides detailed content blocks that MUST be included in command files (`pkg/commands/*.md`) and agent instructions (`pkg/shpeck-rules.md`) when they are implemented.
 
 This is implementation guidance, not normative specification. Normative workflow behavior is defined in `meta/process-spec.md`.
 
 ---
 
-## 1. Global Agent Instructions (`pkg/AGENTS.md`)
+## 1. Global Agent Instructions (`pkg/shpeck-rules.md`)
 
-The following sections MUST be included in `pkg/AGENTS.md`.
+The following sections MUST be included in `pkg/shpeck-rules.md`.
 
 ### 1.1 TODO Discipline
 
