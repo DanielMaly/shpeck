@@ -8,7 +8,6 @@
   },
   "files": ["bin/", "src/", "pkg/", "README.md", "LICENSE"],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
     "test": "bun test",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "biome lint",
