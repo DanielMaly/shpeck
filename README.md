@@ -139,16 +139,4 @@ shpeck init --tool opencode
 - Requires discipline to keep ticket/spec/code alignment intact
 - Single-context-at-a-time model (no automatic dependency management)
 
-## Who Should Use This?
 
-Shpeck is for developers who:
-- Work on complex or unfamiliar codebases
-- Need to bridge business requirements and technical implementation
-- Want structured thinking without heavy process overhead
-- Use AI-powered coding agents and want better workflows for them
-- Prefer explicit workflow steps over ad-hoc prompting
-
----
-
-**Current Version**: v1.11  
-**Status**: Specification complete, implementation pending
