@@ -28,14 +28,14 @@ Notes:
 
 ## Flow
 
-### 1) Input Collection
+### Input Collection
 - **Prompt:** "Describe the bug or unexpected behavior you are observing."
 - **Prompt:** "Which files or components do you suspect are involved?" (optional).
 - **Gather Context:**
   - Read `spec.md` (and `ticket.md` if ticket context).
   - Locate relevant code files based on user input or keyword search.
 
-### 2) Trace Analysis (The "Why")
+### Trace Analysis (The "Why")
 
 Trace the issue backwards through the layers. Stop at the first misalignment.
 
@@ -59,11 +59,11 @@ Trace the issue backwards through the layers. Stop at the first misalignment.
 - If Code == Spec == Ticket, but the behavior is still "wrong", then the **Ticket** (or original intent) was flawed or ambiguous.
 - **Diagnosis:** "Flawed Requirements" or "New Requirement Discovered."
 
-### 3) Global Learnings (Gotchas)
+### Global Learnings (Gotchas)
 - If the diagnosis reveals a non-obvious pitfall (e.g., "Library X silently swallows errors"), append it to `.spec/.global/gotchas.md`.
 - Format: `- [YYYY-MM-DD] [DIAGNOSED] <gotcha description>`
 
-### 4) Report & Recommendation
+### Report & Recommendation
 
 Output a concise diagnosis and the recommended fix.
 

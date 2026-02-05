@@ -35,11 +35,11 @@ Before starting:
 
 ## Flow
 
-### 1. Confirm Scope
+### Confirm Scope
 - Display the tasks from the most recent plan section.
 - **Prompt**: "Proceed with implementation?"
 
-### 2. Execution Loop
+### Execution Loop
 For each task in the plan:
 1. **Context**: Read relevant files defined in the task.
 2. **Implement**: Apply changes using `edit` or `write`.
@@ -48,7 +48,7 @@ For each task in the plan:
 3. **Verify Step**:
    - Run `lsp_diagnostics` on changed files. Fix errors immediately.
 
-### 3. Verification (Post-Implementation)
+### Verification (Post-Implementation)
 Once all tasks are complete:
 1. **LSP Check**: Run `lsp_diagnostics` on all modified files one last time.
 2. **Build/Test**:
@@ -57,7 +57,7 @@ Once all tasks are complete:
    - Run the build/test commands.
    - **Note**: Pre-existing test failures are acceptable if unrelated, but *new* failures must be fixed.
 
-### 4. Logging
+### Logging
 Append a run summary to `.spec/{active_context}/.dev/run.md`:
 ```markdown
 # Run [YYYY-MM-DD HH:MM]

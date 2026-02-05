@@ -29,11 +29,11 @@ Notes:
 
 ## Flow
 
-### 1) Collect Inputs & Path Selection
+### Collect Inputs & Path Selection
 - Display current `context_name`.
 - **Prompt:** "Link to an existing ticket or create a new one?" (Options: `Existing`, `Create`).
 
-### 2) Acquire Ticket Content
+### Acquire Ticket Content
 
 #### Path A: Create New Ticket
 - **Pre-requisite:** Check if external ticket integration is available/configured.
@@ -55,19 +55,19 @@ Notes:
   - **Integration available:** Attempt to fetch ticket details by key.
   - **No integration / Fetch failed:** Prompt user to **paste** the ticket content verbatim.
 
-### 3) Update Context Metadata
+### Update Context Metadata
 - Rewrite `.spec/{active_context}/context.toml` with:
   - `type = "ticket"`
   - `ticket_key = "<key>"` (from creation result or user input)
 - Preserve any other existing fields.
 
-### 4) Create `ticket.md`
+### Create `ticket.md`
 - Write `.spec/{active_context}/ticket.md` with two sections:
   - `# External Ticket` — verbatim content from creation result, fetch, or paste.
   - `# Local Notes` — empty section for user annotations; keep append-only in later commands.
 - Do not modify `spec.md` during promotion.
 
-### 5) Confirmation
+### Confirmation
 - Report the promotion result:
   - Context name (unchanged)
   - Ticket Key: `{ticket_key}` (verify this is linked)

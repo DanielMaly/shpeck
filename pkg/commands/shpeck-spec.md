@@ -35,7 +35,7 @@ Context-specific checks:
 
 ## Flow
 
-### 1. Interpret User Input (Change Requests)
+### Interpret User Input (Change Requests)
 
 If the user provided arguments (e.g., `/shpeck-spec Change error message text`), treat them as a **requested change** to the current spec.
 
@@ -48,7 +48,7 @@ If the user provided no arguments:
 - If `spec.md` is empty or `Version: 0`, generate the first real spec content.
 - Otherwise, treat this as a "refresh/normalize" run (ensure required sections exist; reconcile with research/ticket as needed) without inventing new requirements.
 
-### 2. Load Inputs
+### Load Inputs
 
 1. Read `.spec/{active_context}/spec.md` if it exists.
    - Parse the first line as `Version: N`.
@@ -59,7 +59,7 @@ If the user provided no arguments:
    - the ticket key from `context.toml` (`ticket_key`)
    - any ticket URL if it is present in `ticket.md` content (do not guess)
 
-### 3. Authority Rules (NON-NEGOTIABLE)
+### Authority Rules (NON-NEGOTIABLE)
 
 #### Ticket contexts: intent vs implementation authority
 
@@ -78,7 +78,7 @@ If the requested change (from user arguments) appears to change intent/acceptanc
 - For drafts, `spec.md` defines both intent and implementation.
 - Still avoid guessing when intent is genuinely ambiguous.
 
-### 4. Ambiguity Threshold (Ask Only When It Matters)
+### Ambiguity Threshold (Ask Only When It Matters)
 
 Ask only when:
 - the ticket language supports multiple plausible interpretations that materially change behavior, OR
@@ -87,7 +87,7 @@ Ask only when:
 
 Do NOT ask as a checklist exercise about optional edge cases. Focus on resolving meaning and scope.
 
-### 5. Write or Update `spec.md`
+### Write or Update `spec.md`
 
 Write a spec that is explicit enough for planning and verification, but does not include step-by-step execution (that belongs in `plan.md`).
 
@@ -145,7 +145,7 @@ Use checkbox format:
 Infer reasonable boundaries based on the ticket scope and common scope-creep patterns.
 If you are genuinely uncertain whether a boundary item is in or out of scope, ask the user rather than guessing.
 
-### 6. Version Bump Rules
+### Version Bump Rules
 
 - Increment `Version:` only if the spec meaningfully changes.
 - If regenerating the spec produces no content changes (aside from the version line), do not write a new version.
@@ -157,7 +157,7 @@ Practical rule:
   - `1` if the existing version is `0` or missing/invalid
   - otherwise `oldVersion + 1`
 
-### 7. Global Learnings (Optional)
+### Global Learnings (Optional)
 
 If you discover a verified, generalizable learning that applies beyond this context, append it to the appropriate global file:
 - conventions -> `.spec/.global/conventions.md`

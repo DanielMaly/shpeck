@@ -32,7 +32,7 @@ Notes:
 
 ## Flow
 
-### 1. Collect State
+### Collect State
 - Determine current git branch and trunk branch from `.shpeck.toml` (for context only; verification is allowed on any branch).
 - Gather diffs to understand implementation surface area:
   - `git status --short` (changed files summary)
@@ -40,22 +40,22 @@ Notes:
 - Read `spec.md` fully, focusing on requirements and the "Out of Scope (MUST NOT)" section.
 - Read `.spec/{active_context}/.dev/plan.md` (last section).
 
-### 2. Intent Verification (ticket contexts only)
+### Intent Verification (ticket contexts only)
 - Compare `ticket.md` against `spec.md` for intent/acceptance drift.
 - Flag mismatches explicitly, e.g.: "Ticket expects X, spec defines Y". Do not rewrite files; report for correction (update ticket/spec as needed outside this command).
 
-### 3. Plan vs Spec Alignment
+### Plan vs Spec Alignment
 - Check the most recent plan section in `.dev/plan.md`.
 - **Version Check**: Does the plan reference the current `spec.md` version?
 - **Coverage Check**: Does the plan cover all requirements in `spec.md`?
 - Flag if the plan is stale or missing requirements.
 
-### 4. Implementation Verification
+### Implementation Verification
 - **Impl vs Plan**: Did we implement what was planned? Are there extra files changed that were not in the plan?
 - **Impl vs Spec**: For each requirement in `spec.md`, identify corresponding code changes. Confirm they exist and match the described behavior/contracts.
 - Flag deviations or missing coverage, e.g.: "Spec requires validation A; no implementation or tests found touching <path>."
 
-### 5. Out of Scope Verification (BLOCKING)
+### Out of Scope Verification (BLOCKING)
 
 When verifying implementation against spec:
 
@@ -69,20 +69,20 @@ When verifying implementation against spec:
 
 Scope violations MUST be reported to the user for resolution before the PR can proceed.
 
-### 6. Global Learnings
+### Global Learnings
 
 Verification may reveal undocumented conventions. Record them in `.spec/.global/conventions.md`.
 
 Format: `- [YYYY-MM-DD] [VERIFIED] <convention description>`
 
-### 7. Report
+### Report
 Produce a concise report to the user with sections:
 - **Verified**: items that match (ticket→spec, plan→spec, spec→impl)
 - **Deviations**: mismatches or missing implementations
 - **Scope Violations**: any touches to "Out of Scope" items (call these out clearly)
 - **Follow-ups**: recommended next actions (e.g., run `shpeck-plan` to realign, update `ticket.md`/`spec.md`)
 
-### 8. Stop
+### Stop
 DO NOT attempt to implement any suggestions or fix any discrepancies.
 
 ## Output Expectations

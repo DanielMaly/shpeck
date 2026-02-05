@@ -29,23 +29,23 @@ Notes:
 
 ## Flow
 
-### 1) Load Current Ticket
+### Load Current Ticket
 - Read `.spec/{active_context}/ticket.md`.
 - Identify and preserve the existing `# Local Notes` section content (keep exact text). If missing, create an empty `# Local Notes` section when rewriting.
 
-### 2) Acquire Latest External Ticket Content
+### Acquire Latest External Ticket Content
 - Check for configured ticket integration.
   - **If available:** fetch the ticket body by `ticket_key` from `context.toml`.
   - **If unavailable or fetch fails:** prompt the user to paste the full, verbatim external ticket content.
 - Normalize line endings to LF; do not reflow text.
 
-### 3) Rewrite `ticket.md`
+### Rewrite `ticket.md`
 - Write the file with exactly two sections in this order:
   1. `# External Ticket` — overwrite with fetched/pasted content (verbatim).
   2. `# Local Notes` — reuse the preserved notes (or empty if none existed).
 - Do not insert analysis, summaries, or formatting changes beyond these sections.
 
-### 4) Log in `.dev/run.md`
+### Log in `.dev/run.md`
 - Append an entry noting:
   - Timestamp
   - Command: `shpeck-sync`
@@ -54,7 +54,7 @@ Notes:
   - Outcome: `success` or error message
 - Create `.spec/{active_context}/.dev/run.md` if absent (append-only).
 
-### 5) Report
+### Report
 - Confirm completion with context name, ticket key, and source used.
 - Remind the user that `spec.md` was not changed; run `shpeck-spec` if intent changed.
 

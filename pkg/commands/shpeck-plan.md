@@ -53,7 +53,7 @@ If you catch yourself doing any of these: Remove them from the plan, or ask the 
 
 ## Flow
 
-### 1. Load Inputs
+### Load Inputs
 
 1. Read `.spec/{active_context}/spec.md` and note the current `Version: N`.
 2. Read `.spec/{active_context}/.dev/research.md` if it exists.
@@ -63,7 +63,7 @@ If you catch yourself doing any of these: Remove them from the plan, or ask the 
 
 If you added/modified the "Out of Scope (MUST NOT)" section in `spec.md` during the pre-planning scope check, re-read `spec.md` and update your noted `Version: N` before writing the plan section.
 
-### 2. Synthesize Plan
+### Synthesize Plan
 
 Draft a sequence of operations. A good Shpeck plan follows this general rhythm:
 1. **Verification Prep**: Identify or create the test files/suites needed to prove success.
@@ -78,7 +78,7 @@ Draft a sequence of operations. A good Shpeck plan follows this general rhythm:
   - if they are non-blocking: proceed with a plan that does not depend on them, OR
   - if they are blocking: stop and ask the user a targeted question.
 
-### 3. Write to `plan.md`
+### Write to `plan.md`
 
 `.dev/plan.md` is **append-only**. Each run of `shpeck-plan` appends a new section.
 
@@ -111,10 +111,6 @@ After generating the plan, self-review against these criteria:
 4. **Acceptance criteria concrete** - Every task has a clear "done" condition
 
 If genuinely uncertain whether a task is in scope, ask for clarification before proceeding.
-
-## Global Learnings (Optional)
-
-If you discover a verified, generalizable learning that applies beyond this context, append it to the appropriate global file in `.spec/.global/`.
 
 ## Completion
 
