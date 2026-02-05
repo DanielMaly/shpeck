@@ -1,6 +1,6 @@
 {
   "name": "shpeck",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Spec-Driven Development workflow CLI (Bun)",
   "type": "module",
   "bin": {
