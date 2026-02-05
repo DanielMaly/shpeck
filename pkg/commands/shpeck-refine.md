@@ -157,17 +157,6 @@ Conclude the command by determining the state of the request:
     -   *Action*: Recommend slicing boundaries.
     -   *Next*: User splits ticket or authorizes large scope.
 
-## Global Learnings
-
-During research, you will discover codebase-wide insights. Record them:
-
-- **Conventions** (naming, patterns, style) -> `.spec/.global/conventions.md`
-- **Architecture** (module boundaries, data flow) -> `.spec/.global/architecture.md`
-- **Tooling** (commands, CI/CD, environment) -> `.spec/.global/tooling.md`
-- **Gotchas** (non-obvious behaviors, pitfalls) -> `.spec/.global/gotchas.md`
-
-These persist across contexts and benefit future work.
-
 ## Completion
 
 Report:
