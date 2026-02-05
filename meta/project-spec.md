@@ -245,7 +245,7 @@ pkg/
 
 Each tool config file MUST be valid JSON with the following structure:
 
-```json
+```
 {
   "frontmatter": {
     "<command-name>": {
