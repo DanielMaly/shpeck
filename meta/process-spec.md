@@ -131,8 +131,8 @@ Users must run `shpeck switch` to change contexts. This decouples branch naming 
 - `context.toml`: Context metadata (type and ticket_key if applicable).
 - `ticket.md`: Local ticket file (ticket contexts only). Contains a verbatim "External Ticket" mirror (overwritten by `shpeck-sync`) plus optional local notes.
 - `spec.md`: Mutable technical specification.
-  - The first line must be `Version: N` where N is a positive integer, starting at 1.
-  - **Simplified versioning:** any change to `spec.md` increments the version.
+  - The first line must be `Version: N` where N is a positive integer. `Version: 0` indicates an unpopulated stub.
+  - **Simplified versioning:** `Version:` is incremented only when the spec content meaningfully changes.
   - The version is referenced by `plan.md` to track which spec version a plan was generated against.
   - **Required section:** `spec.md` MUST include an "Out of Scope (MUST NOT)" section listing explicit exclusions. Items in this section are FORBIDDEN from implementation — `shpeck-verify` checks for violations.
 - `reviewers.md`: Generated PR description content.
@@ -279,7 +279,7 @@ Generate or update `spec.md`, incrementing `Version:`.
 
 **Required output:** Generated `spec.md` MUST include an "Out of Scope (MUST NOT)" section listing explicit exclusions. The agent should infer reasonable boundaries based on the ticket scope; if genuinely uncertain about specific items, ask for clarification.
 
-**Global learnings:** May append architecture insights discovered during spec generation to `.spec/.global/architecture.md`.
+**Global learnings:** May append verified, generalizable insights to the appropriate `.spec/.global/` files (conventions, architecture, tooling, or gotchas).
 
 ### 7.10 `shpeck-plan`
 Read `spec.md` and append a new plan section to `.dev/plan.md`. The plan section records the current `spec.md` version.
