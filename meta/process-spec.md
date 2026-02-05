@@ -31,7 +31,7 @@ The presence of `.shpeck.toml` indicates Shpeck has been initialized locally for
 `.shpeck.toml` holds local repo state.
 
 ```toml
-active_context = "ddmuk-1234"   # Current context directory name
+active_context = "xyz-1234"   # Current context directory name
 trunk_branch = "main"           # Default; set during init
 ```
 
@@ -53,7 +53,7 @@ Shpeck writes rules and command definitions into a tool-specific config director
 .shpeck.toml                    # Local config (not committed)
 .<tool>/                        # Tool-specific config (not committed)
 .spec/
-  └── {context_name}/           # e.g., ddmuk-1234 or spike-new-cache
+  └── {context_name}/           # e.g., xyz-1234 or spike-new-cache
       ├── context.toml          # Context metadata (type, ticket_key if applicable)
       ├── ticket.md             # Local copy of ticket (ticket contexts only)
       ├── spec.md               # Technical spec (mutable)
@@ -69,7 +69,7 @@ Each context directory contains `context.toml`:
 
 ```toml
 type = "ticket"                 # "ticket" or "draft"
-ticket_key = "DDMUK-1234"       # Present only for ticket contexts
+ticket_key = "xyz-1234"       # Present only for ticket contexts
 ```
 
 **Cleanup:** Shpeck does not automatically remove stale contexts. Users delete stale `.spec/**` directories manually; `shpeck status --all` helps identify them.
@@ -84,8 +84,8 @@ ticket_key = "DDMUK-1234"       # Present only for ticket contexts
 │   ├── architecture.md         # System structure, module boundaries
 │   ├── tooling.md              # Build, test, deploy commands
 │   └── gotchas.md              # Non-obvious behaviors, pitfalls
-├── ddmuk-1234/                 # Context-specific
-└── ddmuk-5678/
+├── xyz-1234/                 # Context-specific
+└── xyz-5678/
 ```
 
 | File | Purpose |
@@ -110,8 +110,8 @@ ticket_key = "DDMUK-1234"       # Present only for ticket contexts
 ## 4. Naming & Context Resolution
 
 ### 4.1 Terminology
-- `ticket_key`: Ticket identifier as it appears in the ticket system (e.g., `DDMUK-1234`).
-- `context_name`: Directory name for a context (e.g., `ddmuk-1234`, `spike-new-cache`).
+- `ticket_key`: Ticket identifier as it appears in the ticket system (e.g., `xyz-1234`).
+- `context_name`: Directory name for a context (e.g., `xyz-1234`, `spike-new-cache`).
 - `active_context`: The currently selected context, stored in `.shpeck.toml`.
 
 ### 4.2 Context Types
@@ -131,8 +131,8 @@ Users must run `shpeck switch` to change contexts. This decouples branch naming 
 - `context.toml`: Context metadata (type and ticket_key if applicable).
 - `ticket.md`: Local ticket file (ticket contexts only). Contains a verbatim "External Ticket" mirror (overwritten by `shpeck-sync`) plus optional local notes.
 - `spec.md`: Mutable technical specification.
-  - The first line must be `Version: N` where N is a positive integer, starting at 1.
-  - **Simplified versioning:** any change to `spec.md` increments the version.
+  - The first line must be `Version: N` where N is a positive integer. `Version: 0` indicates an unpopulated stub.
+  - **Simplified versioning:** `Version:` is incremented only when the spec content meaningfully changes.
   - The version is referenced by `plan.md` to track which spec version a plan was generated against.
   - **Required section:** `spec.md` MUST include an "Out of Scope (MUST NOT)" section listing explicit exclusions. Items in this section are FORBIDDEN from implementation — `shpeck-verify` checks for violations.
 - `reviewers.md`: Generated PR description content.
@@ -254,9 +254,15 @@ In both cases:
 
 ### 7.6 `shpeck-promote` (Draft to Ticket)
 Draft-only: converts a draft context to a ticket context.
-- Prompts for `ticket_key`.
+- Prompts: "Existing ticket or create new?"
+- **If existing:** prompts for `ticket_key`.
+- **If create:**
+  - If integration available: derives title/description from `spec.md`, prompts user review, creates ticket via API, and obtains `ticket_key`.
+  - If no integration: falls back to manual creation/paste flow.
 - Updates `context.toml` to type=ticket and adds ticket_key.
-- Creates `ticket.md` via integration or paste flow.
+- Creates `ticket.md`:
+  - For existing tickets: via integration fetch or paste.
+  - For created tickets: via the creation result.
 - Context directory keeps its original name; `ticket_key` in `context.toml` provides traceability.
 
 ### 7.7 `shpeck-sync`
@@ -279,7 +285,7 @@ Generate or update `spec.md`, incrementing `Version:`.
 
 **Required output:** Generated `spec.md` MUST include an "Out of Scope (MUST NOT)" section listing explicit exclusions. The agent should infer reasonable boundaries based on the ticket scope; if genuinely uncertain about specific items, ask for clarification.
 
-**Global learnings:** May append architecture insights discovered during spec generation to `.spec/.global/architecture.md`.
+**Global learnings:** May append verified, generalizable insights to the appropriate `.spec/.global/` files (conventions, architecture, tooling, or gotchas).
 
 ### 7.10 `shpeck-plan`
 Read `spec.md` and append a new plan section to `.dev/plan.md`. The plan section records the current `spec.md` version.

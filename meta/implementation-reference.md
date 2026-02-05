@@ -114,7 +114,17 @@ Task-specific findings still go in `.dev/research.md` - global files are for cod
 
 ## 2. Command: `shpeck-refine`
 
-### 2.1 Parallel Exploration
+### 2.1 Assumptions & Input (BLOCKING)
+
+```markdown
+## Assumptions Policy (BLOCKING)
+
+- **No Guessing:** Treat anything not backed by code citations, runtime output, or existing docs as unknown.
+- **Ask, Don't Assume:** If evidence is missing or conflicting, ask the user.
+- **Conflict Resolution:** If the ticket says X but code does Y, document the mismatch and ask the user which is authoritative.
+```
+
+### 2.2 Parallel Exploration
 
 ```markdown
 ## Parallel Exploration
@@ -188,7 +198,35 @@ Structure your findings in `.dev/research.md` using these sections:
 This structure helps subsequent commands (`shpeck-spec`, `shpeck-plan`) extract relevant context efficiently.
 ```
 
-### 2.4 Global Learnings Write
+### 2.5 Possible Outcomes
+
+```markdown
+## Possible Outcomes
+
+Conclude the command by determining the state of the request:
+
+1.  **Ready**: Ticket is feasible and fully understood.
+    -   *Action*: Append findings + "Recommended Approach".
+    -   *Next*: `shpeck-spec`.
+
+2.  **Underspecified**: Key requirements are vague.
+    -   *Action*: Append "Open Questions" + suggested `ticket.md` clarifications.
+    -   *Next*: User updates ticket or answers questions.
+
+3.  **Conflict**: Ticket says X, code does Y.
+    -   *Action*: Document mismatch with citations.
+    -   *Next*: Ask user: "Update intent (ticket) or force implementation change?"
+
+4.  **Feasibility Blocker**: Major risk found (e.g., dependency missing, architecture incompatibility).
+    -   *Action*: Document the blocker and Options A/B.
+    -   *Next*: Wait for user decision.
+
+5.  **Scope Too Large**: Work exceeds a single spec/plan cycle.
+    -   *Action*: Recommend slicing boundaries.
+    -   *Next*: User splits ticket or authorizes large scope.
+```
+
+### 2.6 Global Learnings Write
 
 ```markdown
 ## Global Learnings
