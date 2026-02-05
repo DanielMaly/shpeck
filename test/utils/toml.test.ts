@@ -17,8 +17,8 @@ describe('toml', () => {
 
   test('appends missing key with correct newline handling', () => {
     const input = `trunk_branch = "main"`
-    const out = upsertTopLevelTomlString(input, 'active_context', 'ddmuk-1234')
-    expect(out).toBe(`trunk_branch = "main"\nactive_context = "ddmuk-1234"\n`)
+    const out = upsertTopLevelTomlString(input, 'active_context', 'xyz-1234')
+    expect(out).toBe(`trunk_branch = "main"\nactive_context = "xyz-1234"\n`)
   })
 
   test('parseToml throws ShpeckError with context', () => {

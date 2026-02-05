@@ -63,15 +63,15 @@ describe('shpeck switch (integration)', () => {
 
   test('with arg: sets active_context when context dir exists', async () => {
     await writeFile(join(dir, '.shpeck.toml'), 'trunk_branch = "main"\n', 'utf8')
-    await mkdir(join(dir, '.spec', 'ddmuk-1234'), { recursive: true })
+    await mkdir(join(dir, '.spec', 'xyz-1234'), { recursive: true })
 
-    const { exitCode } = await runCommand(['bun', cliPath, 'switch', 'ddmuk-1234'], {
+    const { exitCode } = await runCommand(['bun', cliPath, 'switch', 'xyz-1234'], {
       cwd: dir,
     })
     expect(exitCode).toBe(0)
 
     const toml = await readFile(join(dir, '.shpeck.toml'), 'utf8')
-    expect(toml).toContain('active_context = "ddmuk-1234"')
+    expect(toml).toContain('active_context = "xyz-1234"')
     expect(toml).toContain('trunk_branch = "main"')
   })
 

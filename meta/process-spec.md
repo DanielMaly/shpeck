@@ -31,7 +31,7 @@ The presence of `.shpeck.toml` indicates Shpeck has been initialized locally for
 `.shpeck.toml` holds local repo state.
 
 ```toml
-active_context = "ddmuk-1234"   # Current context directory name
+active_context = "xyz-1234"   # Current context directory name
 trunk_branch = "main"           # Default; set during init
 ```
 
@@ -53,7 +53,7 @@ Shpeck writes rules and command definitions into a tool-specific config director
 .shpeck.toml                    # Local config (not committed)
 .<tool>/                        # Tool-specific config (not committed)
 .spec/
-  └── {context_name}/           # e.g., ddmuk-1234 or spike-new-cache
+  └── {context_name}/           # e.g., xyz-1234 or spike-new-cache
       ├── context.toml          # Context metadata (type, ticket_key if applicable)
       ├── ticket.md             # Local copy of ticket (ticket contexts only)
       ├── spec.md               # Technical spec (mutable)
@@ -69,7 +69,7 @@ Each context directory contains `context.toml`:
 
 ```toml
 type = "ticket"                 # "ticket" or "draft"
-ticket_key = "DDMUK-1234"       # Present only for ticket contexts
+ticket_key = "xyz-1234"       # Present only for ticket contexts
 ```
 
 **Cleanup:** Shpeck does not automatically remove stale contexts. Users delete stale `.spec/**` directories manually; `shpeck status --all` helps identify them.
@@ -84,8 +84,8 @@ ticket_key = "DDMUK-1234"       # Present only for ticket contexts
 │   ├── architecture.md         # System structure, module boundaries
 │   ├── tooling.md              # Build, test, deploy commands
 │   └── gotchas.md              # Non-obvious behaviors, pitfalls
-├── ddmuk-1234/                 # Context-specific
-└── ddmuk-5678/
+├── xyz-1234/                 # Context-specific
+└── xyz-5678/
 ```
 
 | File | Purpose |
@@ -110,8 +110,8 @@ ticket_key = "DDMUK-1234"       # Present only for ticket contexts
 ## 4. Naming & Context Resolution
 
 ### 4.1 Terminology
-- `ticket_key`: Ticket identifier as it appears in the ticket system (e.g., `DDMUK-1234`).
-- `context_name`: Directory name for a context (e.g., `ddmuk-1234`, `spike-new-cache`).
+- `ticket_key`: Ticket identifier as it appears in the ticket system (e.g., `xyz-1234`).
+- `context_name`: Directory name for a context (e.g., `xyz-1234`, `spike-new-cache`).
 - `active_context`: The currently selected context, stored in `.shpeck.toml`.
 
 ### 4.2 Context Types
