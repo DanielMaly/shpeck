@@ -254,9 +254,15 @@ In both cases:
 
 ### 7.6 `shpeck-promote` (Draft to Ticket)
 Draft-only: converts a draft context to a ticket context.
-- Prompts for `ticket_key`.
+- Prompts: "Existing ticket or create new?"
+- **If existing:** prompts for `ticket_key`.
+- **If create:**
+  - If integration available: derives title/description from `spec.md`, prompts user review, creates ticket via API, and obtains `ticket_key`.
+  - If no integration: falls back to manual creation/paste flow.
 - Updates `context.toml` to type=ticket and adds ticket_key.
-- Creates `ticket.md` via integration or paste flow.
+- Creates `ticket.md`:
+  - For existing tickets: via integration fetch or paste.
+  - For created tickets: via the creation result.
 - Context directory keeps its original name; `ticket_key` in `context.toml` provides traceability.
 
 ### 7.7 `shpeck-sync`
