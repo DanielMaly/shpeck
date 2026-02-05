@@ -1,3 +1,35 @@
+# Shpeck Rules (Local-Only)
+
+This repo uses **Shpeck**: a local-only, spec-driven development (SDD) workflow for brownfield codebases.
+
+Shpeck introduces a set of local artifacts (primarily under `.spec/`) that help an agent move from intent -> research -> spec -> plan -> code -> verification -> PR explanation, while keeping scope tight and respecting existing codebase conventions.
+
+These artifacts are a development aid, not a project artifact. They are intentionally local-only and are not committed.
+
+## What Shpeck Files Mean
+
+- `.shpeck.toml`: local repo state (active context, trunk branch).
+- `.spec/<context>/`: the active working context directory.
+- `.spec/<context>/ticket.md` (ticket contexts only): local working copy of external ticket intent.
+- `.spec/<context>/spec.md`: technical spec.
+  - Ticket contexts: `spec.md` is the source of truth for implementation details, but MUST NOT change intent/acceptance relative to `ticket.md`.
+  - Draft contexts: `spec.md` is the source of truth for both intent and implementation.
+- `.spec/<context>/.dev/`: append-only logs for research (`research.md`), planning (`plan.md`), and execution (`run.md`).
+- `.spec/.global/`: cross-context learnings.
+  - READ these before starting work; they override generic assumptions.
+  - Write to them only when you discover something verified, generalizable, and non-obvious.
+
+## Shpeck Tenets (Process-Spec Backed)
+
+- **Init is required:** if `.shpeck.toml` and `.spec/` are missing, the repo has not been initialized; the user must run `shpeck init` before agent commands that expect Shpeck state.
+- **Local-only means local-only:** never ask to commit or include `.spec/`, `.shpeck.toml`, or tool config dirs (e.g. `.opencode/`, `.claude/`) in a PR.
+- **Intent authority is constrained:** in ticket contexts, `ticket.md` defines intent; `spec.md` defines implementation details and MUST NOT change intent/acceptance relative to `ticket.md`.
+- **Context is explicit:** read `.shpeck.toml` and use the configured active context; never infer context from branch names.
+- **Out-of-scope is binding:** treat `spec.md` "Out of Scope (MUST NOT)" as a hard prohibition; do not implement or refactor excluded areas.
+- **Spec/version gates matter:** if the workflow requires spec version alignment (e.g. executing the most recent plan against the current `spec.md`), stop when versions do not match and direct the user to the correct Shpeck command.
+- **Git safety rule:** commands that modify tracked files or generate PR text require a clean tracked working tree (untracked files ignored).
+- **Trunk discipline:** respect the configured trunk branch (`.shpeck.toml.trunk_branch`); do not do implementation work that is supposed to happen off-trunk while currently on trunk.
+
 ## TODO Discipline (NON-NEGOTIABLE)
 
 For any multi-step task:
