@@ -15,6 +15,18 @@ describe('cli smoke', () => {
     expect(stdout).toContain('Usage: shpeck')
   })
 
+  it('does not print stack trace when no args', async () => {
+    const { exitCode, stdout, stderr } = await runCommand(['bun', cliPath], {
+      cwd: repoRoot,
+      allowNonZeroExit: true,
+    })
+
+    expect(exitCode).toBeGreaterThan(0)
+    expect(stderr).toContain('Usage: shpeck')
+    expect(stderr).not.toContain('Error:')
+    expect(stderr).not.toContain('at ')
+  })
+
   it('fails on unknown command', async () => {
     const { exitCode, stderr } = await runCommand(['bun', cliPath, 'nope'], {
       cwd: repoRoot,
