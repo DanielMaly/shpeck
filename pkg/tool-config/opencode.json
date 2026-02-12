@@ -1,35 +1,7 @@
 {
   "frontmatter": {
     "shpeck-new": {
-      "description": "Create a new Shpeck context (OpenCode)",
-      "agent": "shpeck"
-    },
-    "shpeck-sync": {
-      "agent": "shpeck"
-    },
-    "shpeck-refine": {
-      "agent": "shpeck"
-    },
-    "shpeck-spec": {
-      "agent": "shpeck"
-    },
-    "shpeck-plan": {
-      "agent": "shpeck"
-    },
-    "shpeck-code": {
-      "agent": "shpeck"
-    },
-    "shpeck-diagnose": {
-      "agent": "shpeck"
-    },
-    "shpeck-verify": {
-      "agent": "shpeck"
-    },
-    "shpeck-explain": {
-      "agent": "shpeck"
-    },
-    "shpeck-promote": {
-      "agent": "shpeck"
+      "description": "Create a new Shpeck context (OpenCode)"
     }
   },
   "settings": {

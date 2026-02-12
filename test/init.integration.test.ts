@@ -56,7 +56,7 @@ describe('shpeck init (integration)', () => {
     expect(rules).toContain('## TODO Discipline (NON-NEGOTIABLE)')
 
     const cmd = await readFile(join(dir, '.opencode', 'commands', 'shpeck-new.md'), 'utf8')
-    expect(cmd).toContain('agent: shpeck')
+    expect(cmd).toContain('description: Create a new Shpeck context (OpenCode)')
 
     const settings = await readFile(join(dir, '.opencode', 'opencode.json'), 'utf8')
     expect(settings).toContain('"$schema"')

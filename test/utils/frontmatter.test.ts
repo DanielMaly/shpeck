@@ -22,11 +22,11 @@ describe('frontmatter', () => {
 
   test('applies tool frontmatter and overrides existing keys', () => {
     const input = '---\ndescription: A\nkeep: true\n---\n\n# Body\n'
-    const out = applyFrontmatter(input, { description: 'B', agent: 'shpeck' })
+    const out = applyFrontmatter(input, { description: 'B', custom: 'value' })
 
     expect(out).toContain('description: B')
     expect(out).toContain('keep: true')
-    expect(out).toContain('agent: shpeck')
+    expect(out).toContain('custom: value')
     expect(out).toContain('# Body')
   })
 
