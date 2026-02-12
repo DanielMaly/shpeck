@@ -3,6 +3,7 @@ node_modules/
 .tours/
 
 bun.lock
+package-lock.json
 
 .DS_Store
 
