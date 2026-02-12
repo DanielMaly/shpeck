@@ -57,11 +57,13 @@ export async function main(argv: string[]): Promise<void> {
   try {
     await program.parseAsync(argv)
   } catch (err) {
-    if (
-      err instanceof CommanderError &&
-      (err.code === 'commander.helpDisplayed' || err.code === 'commander.version')
-    ) {
-      return
+    if (err instanceof CommanderError) {
+      if (err.code === 'commander.helpDisplayed' || err.code === 'commander.version') {
+        return
+      }
+
+      console.error(err.message)
+      process.exit(err.exitCode || 1)
     }
 
     if (err instanceof ShpeckError || err instanceof GitError) {
