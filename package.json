@@ -2,6 +2,10 @@
   "name": "shpeck",
   "version": "0.2.0",
   "description": "Spec-Driven Development workflow CLI (Bun)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DanielMaly/shpeck.git"
+  },
   "type": "module",
   "bin": {
     "shpeck": "bin/shpeck.ts"

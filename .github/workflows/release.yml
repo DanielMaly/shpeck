@@ -24,6 +24,12 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
       - name: Install Dependencies
         run: bun install
 
@@ -34,7 +40,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: bun changeset publish
+          publish: npx changeset publish
           version: bun changeset version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
