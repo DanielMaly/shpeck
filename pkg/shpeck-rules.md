@@ -38,7 +38,6 @@ For any multi-step task:
 1. Create todos IMMEDIATELY before starting work - break down into atomic steps
 2. Mark exactly ONE todo as `in_progress` at a time
 3. Mark `completed` IMMEDIATELY after finishing each step (never batch completions)
-4. DO NOT respond to the user until ALL todos are marked completed
 
 If you stop with incomplete todos, you have FAILED the task. The user sees your todo
 list as a progress indicator - incomplete todos signal incomplete work.
@@ -60,7 +59,7 @@ Prefer LSP tools over text manipulation:
 | Navigate to definition | `lsp_goto_definition` | Handles aliases and re-exports |
 | Check for errors | `lsp_diagnostics` | Catches type errors before runtime |
 
-Text-based find-and-replace for symbol renames is FORBIDDEN.
+Text-based find-and-replace for symbol renames is only a last resort.
 
 ## Scope Discipline (BLOCKING)
 
@@ -69,10 +68,8 @@ During implementation, you MUST NOT:
 | Anti-Pattern | Example | Instead |
 |--------------|---------|---------|
 | Scope inflation | "While I'm here, I'll also fix..." | Stop. Only do what's in the plan. |
-| Premature abstraction | "I'll extract this to a utility..." | Inline it. Abstract later if needed. |
 | Over-validation | Adding 10 null checks "just in case" | Match existing code's validation level. |
 | Gold-plating | "This would be better with caching" | Implement what's specced. Note improvement for future. |
-| Drive-by refactoring | "This variable name is confusing" | Leave it. It's not in scope. |
 
 **The Bugfix Rule**: When fixing a bug, fix ONLY the bug. Do not:
 - Refactor surrounding code
@@ -80,4 +77,4 @@ During implementation, you MUST NOT:
 - Improve error messages elsewhere
 - Clean up nearby code style
 
-If you find yourself wanting to do any of these: note it in `.dev/run.md` as a follow-up suggestion, but DO NOT DO IT NOW.
+If you find yourself wanting to do any of these: note it in `.dev/run.md` as a follow-up suggestion instead.
