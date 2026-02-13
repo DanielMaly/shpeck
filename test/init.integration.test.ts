@@ -48,9 +48,6 @@ describe('shpeck init (integration)', () => {
     expect(toml).toContain('trunk_branch = "main"')
     expect(toml).not.toContain('active_context')
 
-    const conventions = await readFile(join(dir, '.spec', '.global', 'conventions.md'), 'utf8')
-    expect(conventions).toContain('# Codebase Conventions')
-
     // tool assets
     const rules = await readFile(join(dir, '.opencode', 'shpeck-rules.md'), 'utf8')
     expect(rules).toContain('## TODO Discipline (NON-NEGOTIABLE)')

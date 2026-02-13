@@ -74,39 +74,6 @@ ticket_key = "xyz-1234"       # Present only for ticket contexts
 
 **Cleanup:** Shpeck does not automatically remove stale contexts. Users delete stale `.spec/**` directories manually; `shpeck status --all` helps identify them.
 
-### 3.5 Global Learning Directory
-`.spec/.global/` contains cross-context codebase learnings that persist across ticket contexts.
-
-```
-.spec/
-├── .global/                    # Cross-context learnings
-│   ├── conventions.md          # Coding patterns, naming, style rules
-│   ├── architecture.md         # System structure, module boundaries
-│   ├── tooling.md              # Build, test, deploy commands
-│   └── gotchas.md              # Non-obvious behaviors, pitfalls
-├── xyz-1234/                 # Context-specific
-└── xyz-5678/
-```
-
-| File | Purpose |
-|------|---------|
-| `conventions.md` | Coding patterns, naming conventions, style rules |
-| `architecture.md` | System structure, module boundaries, data flow |
-| `tooling.md` | Build, test, deploy commands, environment requirements |
-| `gotchas.md` | Non-obvious behaviors, past mistakes, debugging tips |
-
-**Initialization:** `shpeck init` creates `.spec/.global/` with stub files containing section headers and format instructions.
-
-**Write rules:**
-- Entries are append-only with `[YYYY-MM-DD]` prefix
-- Only add verified, generalizable, non-obvious learnings
-- Commands that may write: `shpeck-refine`, `shpeck-code`, `shpeck-spec`, `shpeck-diagnose`, `shpeck-verify`
-
-**Read rules:**
-- All `shpeck-*` commands should read `.spec/.global/` before starting work
-- Global learnings take precedence over agent assumptions
-- Violating documented patterns without explicit justification is an error
-
 ## 4. Naming & Context Resolution
 
 ### 4.1 Terminology
@@ -139,17 +106,16 @@ Users must run `shpeck switch` to change contexts. This decouples branch naming 
   - **Constraint:** `reviewers.md` is generated output and is overwritten on each shpeck-explain run; manual edits will be lost.
   - Generated only by `shpeck-explain`. Overwritten on each run.
 
-### 5.2 `.dev/` Files (Append-Only)
-Files in `.dev/` are append-only for Shpeck commands that write to them. Read-only commands (`shpeck-diagnose`, `shpeck-verify`) do not write to `.dev/`. Users may manually edit or truncate these files if recovery is needed.
-- `research.md`: Findings and rationale. Recommended sections:
+### 5.2 `.dev/` Files
+- `research.md` (append-only): Findings and rationale. Recommended sections:
   - **Summary**: 1-2 paragraph overview of findings
   - **Relevant Code Locations**: File paths with line numbers
   - **Existing Patterns**: How similar things are done in this codebase
   - **Constraints Discovered**: Technical limitations found
   - **Open Questions**: Ambiguities needing clarification
   - **Recommendations**: Suggested approach based on findings
-- `plan.md`: Plan sections. Each plan section records the `spec.md` version it was generated against.
-- `run.md`: Execution log (what ran, what changed, test results, acknowledgments).
+- `plan.md` (mutable): Implementation plan. Generated against a specific `spec.md` version. Overwritten by `shpeck-plan`.
+- `run.md` (append-only): Execution log (what ran, what changed, test results, acknowledgments).
 
 ### 5.3 Content Guidance (Keep It Separated)
 To reduce duplication:
@@ -176,7 +142,6 @@ Shpeck has two interfaces:
 ### 7.1 Local Bootstrap (Script)
 `shpeck init --tool <tool-name> [--trunk <trunk-branch>] [--replace]`:
 - Creates `.spec/` and `.shpeck.toml` if missing.
-- Creates `.spec/.global/` with stub files (`conventions.md`, `architecture.md`, `tooling.md`, `gotchas.md`) containing section headers and format instructions.
 - If `.shpeck.toml` is created by this run: sets `trunk_branch` to the provided value or defaults to `main`.
 - If `.shpeck.toml` already exists: sets `trunk_branch` only if `--trunk` is explicitly provided; otherwise does not modify `.shpeck.toml`.
 - Writes tool rules/command definitions into `.<tool>/`.
@@ -276,8 +241,6 @@ Ticket-only: explore the codebase and append findings to `.dev/research.md`. Thi
 - For complex tickets: may spawn parallel exploration tasks via Task tool
 - Results must be synthesized into `.dev/research.md` using the structured format (see 5.2)
 
-**Global learnings:** May append verified, generalizable insights to `.spec/.global/` files (conventions, architecture, tooling, gotchas).
-
 ### 7.9 `shpeck-spec`
 Generate or update `spec.md`, incrementing `Version:`.
 - **Ticket contexts:** generates from `ticket.md` and `.dev/research.md`.
@@ -285,10 +248,8 @@ Generate or update `spec.md`, incrementing `Version:`.
 
 **Required output:** Generated `spec.md` MUST include an "Out of Scope (MUST NOT)" section listing explicit exclusions. The agent should infer reasonable boundaries based on the ticket scope; if genuinely uncertain about specific items, ask for clarification.
 
-**Global learnings:** May append verified, generalizable insights to the appropriate `.spec/.global/` files (conventions, architecture, tooling, or gotchas).
-
 ### 7.10 `shpeck-plan`
-Read `spec.md` and append a new plan section to `.dev/plan.md`. The plan section records the current `spec.md` version.
+Read `spec.md` and overwrite `.dev/plan.md` with a new plan. The plan records the current `spec.md` version.
 If planning uncovers unknowns/assumptions, record them in `.dev/research.md` (rationale) rather than expanding `spec.md`.
 
 **Pre-planning check:** Before generating the plan, verify `spec.md` contains an "Out of Scope (MUST NOT)" section. If missing, add one with inferred boundaries before proceeding.
@@ -296,8 +257,8 @@ If planning uncovers unknowns/assumptions, record them in `.dev/research.md` (ra
 **Post-plan validation:** After generating the plan, verify every task maps directly to a spec requirement. If genuinely uncertain whether a task is in scope, ask for clarification before proceeding.
 
 ### 7.11 `shpeck-code`
-Execute the most recent plan.
-- **Precondition:** The most recent plan section's recorded spec version must match the current `spec.md` version. If not, fails with a message to run `shpeck-plan` first.
+Execute the plan.
+- **Precondition:** The plan's recorded spec version must match the current `spec.md` version. If not, fails with a message to run `shpeck-plan` first.
 - **Precondition:** Must not be on the configured trunk branch (`.shpeck.toml.trunk_branch`).
 - Prompts for confirmation before proceeding.
 - Runs relevant tests and logs results in `.dev/run.md`.
@@ -312,8 +273,6 @@ Deviations from plan scope must be explicitly approved by user before proceeding
 
 **Verification:** Before completion, must run `lsp_diagnostics` on all changed files. If project has build/test commands, they must pass (pre-existing failures may be noted but not introduced).
 
-**Global learnings:** May append gotchas and tooling insights discovered during implementation to `.spec/.global/gotchas.md` and `.spec/.global/tooling.md`.
-
 ### 7.12 `shpeck-diagnose`
 Read-only analysis of divergence between ticket, spec, and implementation.
 - User describes a bug or unexpected behavior.
@@ -322,12 +281,12 @@ Read-only analysis of divergence between ticket, spec, and implementation.
 - Provides a recommended action path using existing commands.
 - **Does not make changes** — diagnosis only.
 
-**Global learnings:** May append gotchas discovered during debugging to `.spec/.global/gotchas.md`.
-
 ### 7.13 `shpeck-verify`
 Self-review changes.
-- Ticket contexts: compare `ticket.md` vs `spec.md` and flag mismatches.
-- Compare implementation (working tree state) against `spec.md` and flag deviations.
+- **Graceful operation:** verify consistency of whatever artifacts exist.
+  - If `ticket.md` exists: compare against `spec.md`.
+  - If `.dev/plan.md` exists: compare against `spec.md`.
+  - If code changes exist: compare against `spec.md` and `plan.md`.
 - **Scope verification:** Check that no code changes touch items listed in the "Out of Scope (MUST NOT)" section of `spec.md`. Flag violations explicitly.
 - May identify issues that require further `shpeck-plan` -> `shpeck-code` cycles.
 - Does not generate `reviewers.md`.
@@ -335,8 +294,6 @@ Self-review changes.
 **Note:** For draft contexts, only compares implementation against `spec.md` (no ticket comparison).
 
 **Contrast with `shpeck-diagnose`:** `verify` is a general health check. `diagnose` requires user input describing a specific problem to trace.
-
-**Global learnings:** May append conventions discovered during verification to `.spec/.global/conventions.md`.
 
 ### 7.14 `shpeck-explain`
 Generate `reviewers.md` from current state.

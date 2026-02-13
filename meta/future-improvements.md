@@ -35,7 +35,7 @@ Long-running research tasks that continue while the user works on other things:
 - Dependency vulnerability scanning
 - Pattern extraction from commit history
 
-Results would feed into `.spec/.global/` automatically.
+Results would feed into context research files automatically.
 
 ### Model Routing
 Route different task types to optimized models:
@@ -44,19 +44,6 @@ Route different task types to optimized models:
 - UI/visual work → vision-capable model
 
 Currently Shpeck is model-agnostic; routing would require runtime infrastructure.
-
----
-
-## Shared Learnings
-
-### Team-Wide Global Learnings
-Currently `.spec/.global/` is local-only. Options for sharing:
-- Separate `.shpeck-shared/` directory that IS committed
-- Sync mechanism to a team knowledge base
-- Export/import commands for manual sharing
-
-### Automatic Learning Extraction
-Parse commit messages, PR descriptions, and code review comments to automatically populate global learnings. Would require integration with git hosting platform APIs.
 
 ---
 
