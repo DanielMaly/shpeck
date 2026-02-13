@@ -21,10 +21,9 @@ Before starting:
 1. Verify `.shpeck.toml` exists. If missing: fail with "Shpeck not initialized. Run `shpeck init` first."
 2. Verify `active_context` is set and `.spec/{active_context}/` exists. If missing: fail with "No active context. Run `shpeck-new` or `shpeck switch`."
 3. Read `.spec/{active_context}/context.toml` → determine `type` (`ticket` or `draft`). If missing/invalid: fail with "Context metadata missing/invalid: `.spec/{active_context}/context.toml`."
-4. Read global learnings if present: `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md`.
-5. Read `.spec/{active_context}/spec.md`.
+4. Read `.spec/{active_context}/spec.md`.
    - Parse first line `Version: N`. If missing/invalid/0: fail with "Spec has no content. Run `shpeck-spec` first."
-6. For ticket contexts: ensure `.spec/{active_context}/ticket.md` exists. If missing: fail with "ticket.md missing for ticket context. Run `shpeck-sync` or add the ticket copy."
+5. For ticket contexts: ensure `.spec/{active_context}/ticket.md` exists. If missing: fail with "ticket.md missing for ticket context. Run `shpeck-sync` or add the ticket copy."
 
 Notes:
 - `shpeck-verify` may run with a dirty working tree (tracked or untracked changes are allowed).
@@ -68,12 +67,6 @@ When verifying implementation against spec:
    ```
 
 Scope violations MUST be reported to the user for resolution before the PR can proceed.
-
-### Global Learnings
-
-Verification may reveal undocumented conventions. Record them in `.spec/.global/conventions.md`.
-
-Format: `- [YYYY-MM-DD] [VERIFIED] <convention description>`
 
 ### Report
 Produce a concise report to the user with sections:

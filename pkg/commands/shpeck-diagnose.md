@@ -19,8 +19,7 @@ Before starting:
 1. Verify `.shpeck.toml` exists. If missing: fail with "Shpeck not initialized."
 2. Verify `active_context` is set and `.spec/{active_context}/` exists.
 3. Read `.spec/{active_context}/context.toml` (valid types: `ticket` or `draft`).
-4. Read global learnings: `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md`.
-5. Read `.spec/{active_context}/spec.md`.
+4. Read `.spec/{active_context}/spec.md`.
 
 Notes:
 - `shpeck-diagnose` runs with a dirty tree (it needs to see the current broken state).
@@ -58,10 +57,6 @@ Trace the issue backwards through the layers. Stop at the first misalignment.
 #### Layer 4: Ticket vs. Intent (The "Root" Cause)
 - If Code == Spec == Ticket, but the behavior is still "wrong", then the **Ticket** (or original intent) was flawed or ambiguous.
 - **Diagnosis:** "Flawed Requirements" or "New Requirement Discovered."
-
-### Global Learnings (Gotchas)
-- If the diagnosis reveals a non-obvious pitfall (e.g., "Library X silently swallows errors"), append it to `.spec/.global/gotchas.md`.
-- Format: `- [YYYY-MM-DD] [DIAGNOSED] <gotcha description>`
 
 ### Report & Recommendation
 

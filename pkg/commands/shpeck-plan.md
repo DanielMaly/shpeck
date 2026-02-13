@@ -25,8 +25,7 @@ Before starting:
 4. Read `.spec/{active_context}/context.toml` and determine `type`.
    - If missing or invalid, fail with: "Context metadata missing/invalid: `.spec/{active_context}/context.toml`."
    - `type` may be `ticket` or `draft`. (`shpeck-plan` supports both.)
-5. Read `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md` if they exist.
-6. Read `.spec/{active_context}/spec.md`.
+5. Read `.spec/{active_context}/spec.md`.
    - If missing, fail with: "Missing spec.md. Run `shpeck-spec` first."
    - Parse the first line as `Version: N`. If N is missing/invalid or equals `0`, fail with: "Spec has no content. Run `shpeck-spec` first."
 

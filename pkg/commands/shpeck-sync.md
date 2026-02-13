@@ -21,7 +21,6 @@ Before starting:
    - If missing/invalid: fail with "Context metadata missing/invalid: `.spec/{active_context}/context.toml`."
    - Require `type = "ticket"`. If not: fail with "shpeck-sync is for ticket contexts only."
 4. Ensure `.spec/{active_context}/ticket.md` exists. If missing: fail with "ticket.md missing. Run shpeck-promote or paste the ticket first."
-5. Read global learnings if present: `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md` (awareness only; no writes).
 
 Notes:
 - `shpeck-sync` may run with a dirty working tree (local-only writes).

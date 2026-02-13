@@ -52,8 +52,7 @@ For each task in the plan:
 Once all tasks are complete:
 1. **LSP Check**: Run `lsp_diagnostics` on all modified files one last time.
 2. **Build/Test**:
-   - Check `.spec/.global/tooling.md` for build/test commands.
-   - If not found, check project config (`package.json`, `Cargo.toml`, etc.) to infer them.
+   - Check project config (`package.json`, `Cargo.toml`, etc.) to infer build/test commands.
    - Run the build/test commands.
    - **Note**: Pre-existing test failures are acceptable if unrelated, but *new* failures must be fixed.
 
@@ -108,14 +107,6 @@ When renaming symbols or refactoring:
 1. **Prepare**: Use `lsp_prepare_rename` to validate the rename is safe
 2. **Execute**: Use `lsp_rename` for cross-file symbol renames - NEVER use find-and-replace
 3. **Verify**: Run `lsp_diagnostics` on ALL changed files before marking complete
-
-## Global Learnings
-
-During implementation, you may discover:
-- **Gotchas** (unexpected behaviors, edge cases) -> `.spec/.global/gotchas.md`
-- **Tooling** (build commands, test commands) -> `.spec/.global/tooling.md`
-
-Record these for future work.
 
 ## Completion
 Report:

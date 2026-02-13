@@ -29,37 +29,6 @@ export type InitOptions = {
   replace?: boolean
 }
 
-const GLOBAL_STUBS = {
-  'conventions.md':
-    '# Codebase Conventions\n\n' +
-    '<!-- Coding patterns, naming conventions, style rules discovered during development -->\n' +
-    '<!-- Format: - [YYYY-MM-DD] <convention> -->\n\n' +
-    '## Naming\n\n' +
-    '## File Organization  \n\n' +
-    '## Patterns\n',
-  'architecture.md':
-    '# Architecture\n\n' +
-    '<!-- System structure, module boundaries, data flow patterns -->\n' +
-    '<!-- Format: - [YYYY-MM-DD] <insight> -->\n\n' +
-    '## Module Boundaries\n\n' +
-    '## Data Flow\n\n' +
-    '## Key Abstractions\n',
-  'tooling.md':
-    '# Tooling\n\n' +
-    '<!-- Build, test, deploy commands and environment requirements -->\n' +
-    '<!-- Format: - [YYYY-MM-DD] <command/requirement> -->\n\n' +
-    '## Commands\n\n' +
-    '## CI/CD\n\n' +
-    '## Environment\n',
-  'gotchas.md':
-    '# Gotchas & Pitfalls\n\n' +
-    '<!-- Non-obvious behaviors, past mistakes, debugging tips -->\n' +
-    '<!-- Format: - [YYYY-MM-DD] <gotcha> -->\n\n' +
-    '## Non-Obvious Behaviors\n\n' +
-    '## Past Mistakes\n\n' +
-    '## Debugging Tips\n',
-} as const
-
 type ToolConfig = {
   frontmatter: Record<string, unknown>
   settings: Record<string, unknown>
@@ -108,18 +77,9 @@ async function ensureGitExcludeLine(repoRoot: string, line: string): Promise<voi
   await writeTextFile(excludePath, `${existing}${prefix}${line}\n`)
 }
 
-async function ensureGlobalStubFiles(repoRoot: string): Promise<void> {
+async function ensureSpecDir(repoRoot: string): Promise<void> {
   const specDir = join(repoRoot, '.spec')
   await ensureDir(specDir)
-
-  const globalDir = join(specDir, '.global')
-  await ensureDir(globalDir)
-
-  for (const [fileName, content] of Object.entries(GLOBAL_STUBS)) {
-    const filePath = join(globalDir, fileName)
-    if (await pathExists(filePath)) continue
-    await writeTextFile(filePath, content)
-  }
 }
 
 async function ensureShpeckToml(repoRoot: string, trunk?: string): Promise<void> {
@@ -247,7 +207,7 @@ export async function runInit(options: InitOptions): Promise<void> {
   const strategy = getToolStrategy(options.tool)
 
   // (5.1.3-1) protected paths
-  await ensureGlobalStubFiles(repoRoot)
+  await ensureSpecDir(repoRoot)
   await ensureShpeckToml(repoRoot, options.trunk)
 
   // (5.1.3-2/3) tool assets + tool dir handling

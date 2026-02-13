@@ -20,8 +20,7 @@ Before starting:
 3. Read `.spec/{active_context}/context.toml`.
    - If missing/invalid: fail with "Context metadata missing/invalid: `.spec/{active_context}/context.toml`."
    - **Require** `type = "draft"`. If already `ticket`: fail with "shpeck-promote is draft-only. Current context is already a ticket."
-4. Read global learnings if present: `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md` (contextual awareness only; no writes).
-5. Ensure `.spec/{active_context}/ticket.md` does **not** exist yet. If it exists, prompt to confirm overwrite; default is **fail** to avoid clobbering unexpected data.
+4. Ensure `.spec/{active_context}/ticket.md` does **not** exist yet. If it exists, prompt to confirm overwrite; default is **fail** to avoid clobbering unexpected data.
 
 Notes:
 - `shpeck-promote` may run with a dirty working tree. It only writes local Shpeck artifacts.

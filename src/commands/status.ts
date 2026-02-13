@@ -83,7 +83,7 @@ async function listContextDirs(repoRoot: string): Promise<string[]> {
   if (!(await pathExists(specDir))) return []
   const entries = await readdir(specDir, { withFileTypes: true })
   return entries
-    .filter((e) => e.isDirectory() && e.name !== '.global')
+    .filter((e) => e.isDirectory())
     .map((e) => e.name)
     .sort((a, b) => a.localeCompare(b))
 }

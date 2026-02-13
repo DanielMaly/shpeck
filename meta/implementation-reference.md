@@ -31,23 +31,7 @@ list as a progress indicator - incomplete todos signal incomplete work.
 - Finishing without completing all todos - task appears incomplete
 ```
 
-### 1.2 Global Codebase Context
-
-```markdown
-## Global Codebase Context
-
-Before starting work on ANY Shpeck command, check for global learnings:
-
-1. READ `.spec/.global/conventions.md` if it exists - follow these patterns
-2. READ `.spec/.global/architecture.md` if it exists - respect boundaries  
-3. READ `.spec/.global/tooling.md` if it exists - use correct commands
-4. READ `.spec/.global/gotchas.md` if it exists - avoid known pitfalls
-
-These files contain accumulated wisdom from previous work across all contexts.
-Violating documented conventions or repeating documented mistakes is a FAILURE.
-```
-
-### 1.3 LSP Tool Usage
+### 1.2 LSP Tool Usage
 
 ```markdown
 ## LSP Tool Usage
@@ -64,7 +48,7 @@ Prefer LSP tools over text manipulation:
 Text-based find-and-replace for symbol renames is FORBIDDEN.
 ```
 
-### 1.4 Scope Discipline
+### 1.3 Scope Discipline
 
 ```markdown
 ## Scope Discipline (BLOCKING)
@@ -86,28 +70,6 @@ During implementation, you MUST NOT:
 - Clean up nearby code style
 
 If you find yourself wanting to do any of these: note it in `.dev/run.md` as a follow-up suggestion, but DO NOT DO IT NOW.
-```
-
-### 1.5 Updating Global Learnings
-
-```markdown
-## Updating Global Learnings
-
-When you discover something that applies beyond this specific task:
-
-1. **Convention discovered** -> Append to `.spec/.global/conventions.md`
-2. **Architecture insight** -> Append to `.spec/.global/architecture.md`  
-3. **Tooling command** -> Append to `.spec/.global/tooling.md`
-4. **Gotcha/pitfall** -> Append to `.spec/.global/gotchas.md`
-
-Format: `- [YYYY-MM-DD] <learning>`
-
-Only add learnings that are:
-- **Verified**: You confirmed it's true through code inspection or testing
-- **Generalizable**: Applies beyond this specific ticket
-- **Non-obvious**: Not already documented in project README or config files
-
-Task-specific findings still go in `.dev/research.md` - global files are for codebase-wide insights only.
 ```
 
 ---
@@ -226,21 +188,6 @@ Conclude the command by determining the state of the request:
     -   *Next*: User splits ticket or authorizes large scope.
 ```
 
-### 2.6 Global Learnings Write
-
-```markdown
-## Global Learnings
-
-During research, you will discover codebase-wide insights. Record them:
-
-- **Conventions** (naming, patterns, style) -> `.spec/.global/conventions.md`
-- **Architecture** (module boundaries, data flow) -> `.spec/.global/architecture.md`
-- **Tooling** (commands, CI/CD, environment) -> `.spec/.global/tooling.md`
-- **Gotchas** (non-obvious behaviors, pitfalls) -> `.spec/.global/gotchas.md`
-
-These persist across contexts and benefit future work.
-```
-
 ---
 
 ## 3. Command: `shpeck-spec`
@@ -271,14 +218,6 @@ Infer reasonable boundaries based on:
 - Common scope-creep patterns (see global AGENTS.md Scope Discipline)
 
 If genuinely uncertain whether specific items are in or out of scope, ask for clarification.
-```
-
-### 3.2 Global Learnings Write
-
-```markdown
-## Global Learnings
-
-During spec generation, you may discover architectural insights. Record them in `.spec/.global/architecture.md`.
 ```
 
 ---
@@ -329,7 +268,7 @@ If genuinely uncertain whether a task is in scope, ask for clarification before 
 
 ### 5.1 Scope Discipline
 
-Include the Scope Discipline anti-pattern table from Section 1.4 (global AGENTS.md). Additionally:
+Include the Scope Discipline anti-pattern table from Section 1.3 (global AGENTS.md). Additionally:
 
 ```markdown
 ## Implementation Boundaries
@@ -385,7 +324,7 @@ For large implementations, delegate subtasks appropriately:
 
 When delegating, provide:
 1. **TASK**: Specific, atomic goal
-2. **CONTEXT**: Relevant file paths, existing patterns from `.spec/.global/`
+2. **CONTEXT**: Relevant file paths, existing patterns
 3. **CONSTRAINTS**: What NOT to change, boundaries to respect
 4. **VERIFICATION**: How to confirm success
 
@@ -399,33 +338,9 @@ ALWAYS verify delegated work:
 Never trust "I'm done" - verify independently.
 ```
 
-### 5.4 Global Learnings Write
-
-```markdown
-## Global Learnings
-
-During implementation, you may discover:
-- **Gotchas** (unexpected behaviors, edge cases) -> `.spec/.global/gotchas.md`
-- **Tooling** (build commands, test commands) -> `.spec/.global/tooling.md`
-
-Record these for future work.
-```
-
 ---
 
 ## 6. Command: `shpeck-diagnose`
-
-### 6.1 Global Learnings Write
-
-```markdown
-## Global Learnings
-
-Bug investigation often reveals non-obvious behaviors. Record discovered gotchas in `.spec/.global/gotchas.md`.
-
-Format: `- [YYYY-MM-DD] [BUG] <gotcha description>`
-
-This helps future debugging efforts avoid the same pitfalls.
-```
 
 ---
 
@@ -447,80 +362,4 @@ When verifying implementation against spec:
    ```
 
 Scope violations MUST be reported to the user for resolution before the PR can proceed.
-```
-
-### 7.2 Global Learnings Write
-
-```markdown
-## Global Learnings
-
-Verification may reveal undocumented conventions. Record them in `.spec/.global/conventions.md`.
-
-Format: `- [YYYY-MM-DD] [VERIFIED] <convention description>`
-```
-
----
-
-## 8. Global Learning File Templates
-
-These templates are used by `shpeck init` to create `.spec/.global/` stub files.
-
-### 8.1 conventions.md
-
-```markdown
-# Codebase Conventions
-
-<!-- Coding patterns, naming conventions, style rules discovered during development -->
-<!-- Format: - [YYYY-MM-DD] <convention> -->
-
-## Naming
-
-## File Organization  
-
-## Patterns
-```
-
-### 8.2 architecture.md
-
-```markdown
-# Architecture
-
-<!-- System structure, module boundaries, data flow patterns -->
-<!-- Format: - [YYYY-MM-DD] <insight> -->
-
-## Module Boundaries
-
-## Data Flow
-
-## Key Abstractions
-```
-
-### 8.3 tooling.md
-
-```markdown
-# Tooling
-
-<!-- Build, test, deploy commands and environment requirements -->
-<!-- Format: - [YYYY-MM-DD] <command/requirement> -->
-
-## Commands
-
-## CI/CD
-
-## Environment
-```
-
-### 8.4 gotchas.md
-
-```markdown
-# Gotchas & Pitfalls
-
-<!-- Non-obvious behaviors, past mistakes, debugging tips -->
-<!-- Format: - [YYYY-MM-DD] <gotcha> -->
-
-## Non-Obvious Behaviors
-
-## Past Mistakes
-
-## Debugging Tips
 ```

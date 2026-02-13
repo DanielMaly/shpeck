@@ -10,7 +10,6 @@ Create a new context for ticket-driven or draft work.
 
 Before starting:
 1. Verify `.shpeck.toml` exists. If not, fail with: "Shpeck not initialized. Run `shpeck init` first."
-2. Read `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md` if they exist.
 
 ## Flow
 

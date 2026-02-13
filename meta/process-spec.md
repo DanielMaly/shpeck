@@ -74,39 +74,6 @@ ticket_key = "xyz-1234"       # Present only for ticket contexts
 
 **Cleanup:** Shpeck does not automatically remove stale contexts. Users delete stale `.spec/**` directories manually; `shpeck status --all` helps identify them.
 
-### 3.5 Global Learning Directory
-`.spec/.global/` contains cross-context codebase learnings that persist across ticket contexts.
-
-```
-.spec/
-├── .global/                    # Cross-context learnings
-│   ├── conventions.md          # Coding patterns, naming, style rules
-│   ├── architecture.md         # System structure, module boundaries
-│   ├── tooling.md              # Build, test, deploy commands
-│   └── gotchas.md              # Non-obvious behaviors, pitfalls
-├── xyz-1234/                 # Context-specific
-└── xyz-5678/
-```
-
-| File | Purpose |
-|------|---------|
-| `conventions.md` | Coding patterns, naming conventions, style rules |
-| `architecture.md` | System structure, module boundaries, data flow |
-| `tooling.md` | Build, test, deploy commands, environment requirements |
-| `gotchas.md` | Non-obvious behaviors, past mistakes, debugging tips |
-
-**Initialization:** `shpeck init` creates `.spec/.global/` with stub files containing section headers and format instructions.
-
-**Write rules:**
-- Entries are append-only with `[YYYY-MM-DD]` prefix
-- Only add verified, generalizable, non-obvious learnings
-- Commands that may write: `shpeck-refine`, `shpeck-code`, `shpeck-spec`, `shpeck-diagnose`, `shpeck-verify`
-
-**Read rules:**
-- All `shpeck-*` commands should read `.spec/.global/` before starting work
-- Global learnings take precedence over agent assumptions
-- Violating documented patterns without explicit justification is an error
-
 ## 4. Naming & Context Resolution
 
 ### 4.1 Terminology
@@ -176,7 +143,6 @@ Shpeck has two interfaces:
 ### 7.1 Local Bootstrap (Script)
 `shpeck init --tool <tool-name> [--trunk <trunk-branch>] [--replace]`:
 - Creates `.spec/` and `.shpeck.toml` if missing.
-- Creates `.spec/.global/` with stub files (`conventions.md`, `architecture.md`, `tooling.md`, `gotchas.md`) containing section headers and format instructions.
 - If `.shpeck.toml` is created by this run: sets `trunk_branch` to the provided value or defaults to `main`.
 - If `.shpeck.toml` already exists: sets `trunk_branch` only if `--trunk` is explicitly provided; otherwise does not modify `.shpeck.toml`.
 - Writes tool rules/command definitions into `.<tool>/`.
@@ -276,16 +242,12 @@ Ticket-only: explore the codebase and append findings to `.dev/research.md`. Thi
 - For complex tickets: may spawn parallel exploration tasks via Task tool
 - Results must be synthesized into `.dev/research.md` using the structured format (see 5.2)
 
-**Global learnings:** May append verified, generalizable insights to `.spec/.global/` files (conventions, architecture, tooling, gotchas).
-
 ### 7.9 `shpeck-spec`
 Generate or update `spec.md`, incrementing `Version:`.
 - **Ticket contexts:** generates from `ticket.md` and `.dev/research.md`.
 - **Draft contexts:** interactive flow where the user describes intent conversationally; the command shapes it into spec format and may append codebase findings/rationale to `.dev/research.md`.
 
 **Required output:** Generated `spec.md` MUST include an "Out of Scope (MUST NOT)" section listing explicit exclusions. The agent should infer reasonable boundaries based on the ticket scope; if genuinely uncertain about specific items, ask for clarification.
-
-**Global learnings:** May append verified, generalizable insights to the appropriate `.spec/.global/` files (conventions, architecture, tooling, or gotchas).
 
 ### 7.10 `shpeck-plan`
 Read `spec.md` and append a new plan section to `.dev/plan.md`. The plan section records the current `spec.md` version.
@@ -312,8 +274,6 @@ Deviations from plan scope must be explicitly approved by user before proceeding
 
 **Verification:** Before completion, must run `lsp_diagnostics` on all changed files. If project has build/test commands, they must pass (pre-existing failures may be noted but not introduced).
 
-**Global learnings:** May append gotchas and tooling insights discovered during implementation to `.spec/.global/gotchas.md` and `.spec/.global/tooling.md`.
-
 ### 7.12 `shpeck-diagnose`
 Read-only analysis of divergence between ticket, spec, and implementation.
 - User describes a bug or unexpected behavior.
@@ -321,8 +281,6 @@ Read-only analysis of divergence between ticket, spec, and implementation.
 - Outputs a diagnosis indicating which layer(s) are misaligned.
 - Provides a recommended action path using existing commands.
 - **Does not make changes** — diagnosis only.
-
-**Global learnings:** May append gotchas discovered during debugging to `.spec/.global/gotchas.md`.
 
 ### 7.13 `shpeck-verify`
 Self-review changes.
@@ -335,8 +293,6 @@ Self-review changes.
 **Note:** For draft contexts, only compares implementation against `spec.md` (no ticket comparison).
 
 **Contrast with `shpeck-diagnose`:** `verify` is a general health check. `diagnose` requires user input describing a specific problem to trace.
-
-**Global learnings:** May append conventions discovered during verification to `.spec/.global/conventions.md`.
 
 ### 7.14 `shpeck-explain`
 Generate `reviewers.md` from current state.

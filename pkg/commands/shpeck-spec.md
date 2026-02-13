@@ -25,7 +25,6 @@ Before starting:
 3. Verify `.spec/{active_context}/` exists. If not, fail with: "Active context directory missing. Run `shpeck status --all` to inspect contexts."
 4. Read `.spec/{active_context}/context.toml` and determine `type`:
    - If missing or invalid, fail with: "Context metadata missing/invalid: `.spec/{active_context}/context.toml`."
-5. Read `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md` if they exist.
 
 Context-specific checks:
 - If `type = "ticket"`:
@@ -108,7 +107,7 @@ Recommended spec structure (remove sections that truly do not apply):
 - `## Desired Behavior`
 - `## Requirements`
 - `## Interfaces / Data / Contracts` (only if relevant)
-- `## Constraints` (only if grounded in ticket, global learnings, or verified findings)
+- `## Constraints` (only if grounded in ticket or verified findings)
 - `## Acceptance Criteria` (REQUIRED)
 - `## Out of Scope (MUST NOT)` (REQUIRED)
 
@@ -156,16 +155,6 @@ Practical rule:
 - If different, write the new spec and set `Version:` to:
   - `1` if the existing version is `0` or missing/invalid
   - otherwise `oldVersion + 1`
-
-### Global Learnings (Optional)
-
-If you discover a verified, generalizable learning that applies beyond this context, append it to the appropriate global file:
-- conventions -> `.spec/.global/conventions.md`
-- architecture -> `.spec/.global/architecture.md`
-- tooling -> `.spec/.global/tooling.md`
-- gotchas -> `.spec/.global/gotchas.md`
-
-Do not add task-specific notes to global learnings.
 
 ## Completion
 

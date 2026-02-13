@@ -19,9 +19,6 @@ These artifacts are intentionally local-only and are not committed.
   - Draft contexts: `spec.md` is the source of truth for both intent and implementation.
 - `.spec/<context>/reviewers.md`: generated PR description text (overwritten by `shpeck-explain`).
 - `.spec/<context>/.dev/`: append-only logs for research (`research.md`), planning (`plan.md`), and execution (`run.md`).
-- `.spec/.global/`: cross-context learnings.
-  - READ these before starting work; they override generic assumptions.
-  - Write to them only when you discover something verified, generalizable, and non-obvious.
 
 ## Shpeck Tenets (Process-Spec Backed)
 
@@ -51,18 +48,6 @@ list as a progress indicator - incomplete todos signal incomplete work.
 - Batch-completing multiple todos at once - defeats real-time tracking
 - Proceeding without marking `in_progress` - unclear what you're working on
 - Finishing without completing all todos - task appears incomplete
-
-## Global Codebase Context
-
-Before starting work on ANY Shpeck command, check for global learnings:
-
-1. READ `.spec/.global/conventions.md` if it exists - follow these patterns
-2. READ `.spec/.global/architecture.md` if it exists - respect boundaries
-3. READ `.spec/.global/tooling.md` if it exists - use correct commands
-4. READ `.spec/.global/gotchas.md` if it exists - avoid known pitfalls
-
-These files contain accumulated wisdom from previous work across all contexts.
-Violating documented conventions or repeating documented mistakes is a FAILURE.
 
 ## LSP Tool Usage
 
@@ -96,21 +81,3 @@ During implementation, you MUST NOT:
 - Clean up nearby code style
 
 If you find yourself wanting to do any of these: note it in `.dev/run.md` as a follow-up suggestion, but DO NOT DO IT NOW.
-
-## Updating Global Learnings
-
-When you discover something that applies beyond this specific task:
-
-1. **Convention discovered** -> Append to `.spec/.global/conventions.md`
-2. **Architecture insight** -> Append to `.spec/.global/architecture.md`
-3. **Tooling command** -> Append to `.spec/.global/tooling.md`
-4. **Gotcha/pitfall** -> Append to `.spec/.global/gotchas.md`
-
-Format: `- [YYYY-MM-DD] <learning>`
-
-Only add learnings that are:
-- **Verified**: You confirmed it's true through code inspection or testing
-- **Generalizable**: Applies beyond this specific ticket
-- **Non-obvious**: Not already documented in project README or config files
-
-Task-specific findings still go in `.dev/research.md` - global files are for codebase-wide insights only.

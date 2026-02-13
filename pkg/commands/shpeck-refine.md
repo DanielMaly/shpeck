@@ -31,7 +31,6 @@ Before starting:
 3. Verify `.spec/{active_context}/` exists.
 4. Verify `.spec/{active_context}/context.toml` contains `type = "ticket"`.
    - If `type = "draft"`, fail with: "shpeck-refine is for ticket contexts only. For drafts, use shpeck-spec directly."
-5. Read `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md` if they exist.
 
 ## Flow
 

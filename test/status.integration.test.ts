@@ -83,9 +83,6 @@ describe('shpeck status (integration)', () => {
     await mkdir(join(dir, '.spec', 'b', '.dev'), { recursive: true })
     await mkdir(join(dir, '.spec', 'a', '.dev'), { recursive: true })
 
-    // should not show up in --all listing
-    await mkdir(join(dir, '.spec', '.global'), { recursive: true })
-
     // ensure different mtimes by writing in sequence
     await writeFile(join(dir, '.spec', 'a', 'context.toml'), 'type = "ticket"\n', 'utf8')
     await writeFile(join(dir, '.spec', 'b', 'context.toml'), 'type = "draft"\n', 'utf8')

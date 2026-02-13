@@ -23,12 +23,11 @@ Before starting:
 4. Read `.spec/{active_context}/context.toml` and determine `type`.
    - If missing or invalid, fail with: "Context metadata missing/invalid: `.spec/{active_context}/context.toml`."
    - `type` may be `ticket` or `draft`. (`shpeck-explain` supports both.)
-5. Read `.spec/.global/conventions.md`, `.spec/.global/architecture.md`, `.spec/.global/tooling.md`, `.spec/.global/gotchas.md` if they exist.
-6. **Branch Safety**:
+5. **Branch Safety**:
    - Read `trunk_branch` from `.shpeck.toml` (default to `main` if missing).
    - Get current git branch.
    - **FAIL** if current branch == trunk branch. "Safety Violation: Cannot run shpeck-explain on trunk. Switch to a feature branch."
-7. **Tree State**:
+6. **Tree State**:
    - Check for uncommitted changes to tracked files (`git status --porcelain -uno`).
    - **FAIL** if dirty. "Working tree dirty. Commit changes before running shpeck-explain." (Untracked files are ignored).
 
