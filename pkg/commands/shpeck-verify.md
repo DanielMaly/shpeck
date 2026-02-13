@@ -8,12 +8,11 @@ Run a self-review of the current working tree and branch against `spec.md` (and 
 
 ## Goal
 
-Surface alignment and drift:
+Surface alignment and drift across **available** artifacts:
 - **Intent Alignment (ticket contexts):** `ticket.md` vs `spec.md`
-- **Plan Alignment:** Plan covers spec requirements & implementation follows plan
-- **Spec Fidelity:** implementation vs `spec.md`
-- **Scope Guard:** flag touches to "Out of Scope (MUST NOT)" items
-- **Conventions:** capture verified patterns discovered during review
+- **Plan Alignment (if plan exists):** Plan covers spec requirements & implementation follows plan
+- **Spec Fidelity (if code exists):** implementation vs `spec.md`
+- **Scope Guard (if code exists):** flag touches to "Out of Scope (MUST NOT)" items
 
 ## Preflight
 
@@ -37,40 +36,43 @@ Notes:
   - `git status --short` (changed files summary)
   - `git diff --stat` (optional) to size changes
 - Read `spec.md` fully, focusing on requirements and the "Out of Scope (MUST NOT)" section.
-- Read `.spec/{active_context}/.dev/plan.md` (last section).
+- Check if `.spec/{active_context}/.dev/plan.md` exists. If so, read the last section.
 
 ### Intent Verification (ticket contexts only)
 - Compare `ticket.md` against `spec.md` for intent/acceptance drift.
 - Flag mismatches explicitly, e.g.: "Ticket expects X, spec defines Y". Do not rewrite files; report for correction (update ticket/spec as needed outside this command).
 
 ### Plan vs Spec Alignment
-- Check the most recent plan section in `.dev/plan.md`.
-- **Version Check**: Does the plan reference the current `spec.md` version?
-- **Coverage Check**: Does the plan cover all requirements in `spec.md`?
-- Flag if the plan is stale or missing requirements.
+- **If `plan.md` does not exist:** Skip this check. (Note as "Plan not yet generated" in report).
+- **If `plan.md` exists:**
+  - Check the most recent plan section.
+  - **Version Check**: Does the plan reference the current `spec.md` version?
+  - **Coverage Check**: Does the plan cover all requirements in `spec.md`?
+  - Flag if the plan is stale or missing requirements.
 
 ### Implementation Verification
-- **Impl vs Plan**: Did we implement what was planned? Are there extra files changed that were not in the plan?
-- **Impl vs Spec**: For each requirement in `spec.md`, identify corresponding code changes. Confirm they exist and match the described behavior/contracts.
-- Flag deviations or missing coverage, e.g.: "Spec requires validation A; no implementation or tests found touching <path>."
+- **If no code changes detected (git status/diff is empty):** Skip this check. (Note as "No implementation started" in report).
+- **If code changes exist:**
+  - **Impl vs Plan (if plan exists)**: Did we implement what was planned? Are there extra files changed that were not in the plan?
+  - **Impl vs Spec**: For each requirement in `spec.md`, identify corresponding code changes. Confirm they exist and match the described behavior/contracts.
+  - Flag deviations or missing coverage, e.g.: "Spec requires validation A; no implementation or tests found touching <path>."
 
 ### Out of Scope Verification (BLOCKING)
 
-When verifying implementation against spec:
-
-1. Read the "Out of Scope (MUST NOT)" section from `spec.md`
-2. For each exclusion, verify no code changes touch that area
-3. Flag any violations explicitly:
-   ```
-   SCOPE VIOLATION: spec.md excludes "Refactoring existing auth code" 
-   but changes were made to src/auth/service.ts
-   ```
-
-Scope violations MUST be reported to the user for resolution before the PR can proceed.
+- **If no code changes detected:** Skip this check.
+- **If code changes exist:**
+  1. Read the "Out of Scope (MUST NOT)" section from `spec.md`
+  2. For each exclusion, verify no code changes touch that area
+  3. Flag any violations explicitly:
+     ```
+     SCOPE VIOLATION: spec.md excludes "Refactoring existing auth code" 
+     but changes were made to src/auth/service.ts
+     ```
+  Scope violations MUST be reported to the user for resolution before the PR can proceed.
 
 ### Report
 Produce a concise report to the user with sections:
-- **Verified**: items that match (ticket→spec, plan→spec, spec→impl)
+- **Verified**: items that match (ticket→spec, plan→spec, spec→impl). explicitly state which artifacts were available.
 - **Deviations**: mismatches or missing implementations
 - **Scope Violations**: any touches to "Out of Scope" items (call these out clearly)
 - **Follow-ups**: recommended next actions (e.g., run `shpeck-plan` to realign, update `ticket.md`/`spec.md`)

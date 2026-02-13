@@ -283,8 +283,10 @@ Read-only analysis of divergence between ticket, spec, and implementation.
 
 ### 7.13 `shpeck-verify`
 Self-review changes.
-- Ticket contexts: compare `ticket.md` vs `spec.md` and flag mismatches.
-- Compare implementation (working tree state) against `spec.md` and flag deviations.
+- **Graceful operation:** verify consistency of whatever artifacts exist.
+  - If `ticket.md` exists: compare against `spec.md`.
+  - If `.dev/plan.md` exists: compare against `spec.md`.
+  - If code changes exist: compare against `spec.md` and `plan.md`.
 - **Scope verification:** Check that no code changes touch items listed in the "Out of Scope (MUST NOT)" section of `spec.md`. Flag violations explicitly.
 - May identify issues that require further `shpeck-plan` -> `shpeck-code` cycles.
 - Does not generate `reviewers.md`.
