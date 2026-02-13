@@ -4,7 +4,7 @@ description: Generate or update plan.md for the active context
 
 # shpeck-plan
 
-Read `.spec/{active_context}/spec.md` and append a new implementation plan section to `.spec/{active_context}/.dev/plan.md`.
+Read `.spec/{active_context}/spec.md` and overwrite `.spec/{active_context}/.dev/plan.md` with a new implementation plan.
 
 The plan is a sequenced list of operations that `shpeck-code` can execute to fulfill the spec.
 
@@ -57,8 +57,7 @@ If you catch yourself doing any of these: Remove them from the plan, or ask the 
 1. Read `.spec/{active_context}/spec.md` and note the current `Version: N`.
 2. Read `.spec/{active_context}/.dev/research.md` if it exists.
    - If it does not exist, create it (empty). This file is append-only.
-3. Read `.spec/{active_context}/.dev/plan.md` if it exists.
-   - If it does not exist, create it (empty). This file is append-only.
+3. Note that `.spec/{active_context}/.dev/plan.md` will be overwritten if it exists.
 
 If you added/modified the "Out of Scope (MUST NOT)" section in `spec.md` during the pre-planning scope check, re-read `spec.md` and update your noted `Version: N` before writing the plan section.
 
@@ -79,9 +78,9 @@ Draft a sequence of operations. A good Shpeck plan follows this general rhythm:
 
 ### Write to `plan.md`
 
-`.dev/plan.md` is **append-only**. Each run of `shpeck-plan` appends a new section.
+`.dev/plan.md` is **overwritten** on each run of `shpeck-plan`.
 
-The new section MUST follow this format:
+The file MUST follow this format:
 
 ```markdown
 ---
@@ -121,7 +120,7 @@ Report:
 ## Example Output
 
 ```
-Plan generated and appended to .spec/xyz-1234/.dev/plan.md.
+Plan generated and written to .spec/xyz-1234/.dev/plan.md.
 - Based on spec.md Version: 3
 - 5 implementation tasks mapped to spec requirements
 - 2 verification steps added

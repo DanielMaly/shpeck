@@ -18,7 +18,7 @@ These artifacts are intentionally local-only and are not committed.
   - Ticket contexts: `spec.md` is the source of truth for implementation details, but MUST NOT change intent/acceptance relative to `ticket.md`.
   - Draft contexts: `spec.md` is the source of truth for both intent and implementation.
 - `.spec/<context>/reviewers.md`: generated PR description text (overwritten by `shpeck-explain`).
-- `.spec/<context>/.dev/`: append-only logs for research (`research.md`), planning (`plan.md`), and execution (`run.md`).
+- `.spec/<context>/.dev/`: append-only logs for research (`research.md`) and execution (`run.md`); mutable plan (`plan.md`).
 
 ## Shpeck Tenets (Process-Spec Backed)
 

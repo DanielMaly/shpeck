@@ -4,7 +4,7 @@ description: Execute the most recent plan for the active context
 
 # shpeck-code
 
-Execute the implementation tasks defined in the most recent plan section of `.dev/plan.md`.
+Execute the implementation tasks defined in `.dev/plan.md`.
 
 ## Goal
 
@@ -29,14 +29,14 @@ Before starting:
    - **FAIL** if dirty. "Working tree dirty. Commit or stash changes before running shpeck-code." (Untracked files are ignored).
 4. **Plan Freshness**:
    - Read `.spec/{active_context}/spec.md` -> extract `Version: N`.
-   - Read `.spec/{active_context}/.dev/plan.md` -> find the *last* plan section.
-   - Extract the spec version referenced in that plan section header (e.g., "Plan v... (Spec vN)").
+   - Read `.spec/{active_context}/.dev/plan.md`.
+   - Extract the spec version referenced in the plan header (e.g., "Spec Version: N").
    - **FAIL** if plan version != spec version. "Plan is stale (Spec vN vs Plan Spec vM). Run `shpeck-plan` first."
 
 ## Flow
 
 ### Confirm Scope
-- Display the tasks from the most recent plan section.
+- Display the tasks from the plan.
 - **Prompt**: "Proceed with implementation?"
 
 ### Execution Loop

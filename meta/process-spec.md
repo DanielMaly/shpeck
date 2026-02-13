@@ -106,17 +106,16 @@ Users must run `shpeck switch` to change contexts. This decouples branch naming 
   - **Constraint:** `reviewers.md` is generated output and is overwritten on each shpeck-explain run; manual edits will be lost.
   - Generated only by `shpeck-explain`. Overwritten on each run.
 
-### 5.2 `.dev/` Files (Append-Only)
-Files in `.dev/` are append-only for Shpeck commands that write to them. Read-only commands (`shpeck-diagnose`, `shpeck-verify`) do not write to `.dev/`. Users may manually edit or truncate these files if recovery is needed.
-- `research.md`: Findings and rationale. Recommended sections:
+### 5.2 `.dev/` Files
+- `research.md` (append-only): Findings and rationale. Recommended sections:
   - **Summary**: 1-2 paragraph overview of findings
   - **Relevant Code Locations**: File paths with line numbers
   - **Existing Patterns**: How similar things are done in this codebase
   - **Constraints Discovered**: Technical limitations found
   - **Open Questions**: Ambiguities needing clarification
   - **Recommendations**: Suggested approach based on findings
-- `plan.md`: Plan sections. Each plan section records the `spec.md` version it was generated against.
-- `run.md`: Execution log (what ran, what changed, test results, acknowledgments).
+- `plan.md` (mutable): Implementation plan. Generated against a specific `spec.md` version. Overwritten by `shpeck-plan`.
+- `run.md` (append-only): Execution log (what ran, what changed, test results, acknowledgments).
 
 ### 5.3 Content Guidance (Keep It Separated)
 To reduce duplication:
@@ -250,7 +249,7 @@ Generate or update `spec.md`, incrementing `Version:`.
 **Required output:** Generated `spec.md` MUST include an "Out of Scope (MUST NOT)" section listing explicit exclusions. The agent should infer reasonable boundaries based on the ticket scope; if genuinely uncertain about specific items, ask for clarification.
 
 ### 7.10 `shpeck-plan`
-Read `spec.md` and append a new plan section to `.dev/plan.md`. The plan section records the current `spec.md` version.
+Read `spec.md` and overwrite `.dev/plan.md` with a new plan. The plan records the current `spec.md` version.
 If planning uncovers unknowns/assumptions, record them in `.dev/research.md` (rationale) rather than expanding `spec.md`.
 
 **Pre-planning check:** Before generating the plan, verify `spec.md` contains an "Out of Scope (MUST NOT)" section. If missing, add one with inferred boundaries before proceeding.
@@ -258,8 +257,8 @@ If planning uncovers unknowns/assumptions, record them in `.dev/research.md` (ra
 **Post-plan validation:** After generating the plan, verify every task maps directly to a spec requirement. If genuinely uncertain whether a task is in scope, ask for clarification before proceeding.
 
 ### 7.11 `shpeck-code`
-Execute the most recent plan.
-- **Precondition:** The most recent plan section's recorded spec version must match the current `spec.md` version. If not, fails with a message to run `shpeck-plan` first.
+Execute the plan.
+- **Precondition:** The plan's recorded spec version must match the current `spec.md` version. If not, fails with a message to run `shpeck-plan` first.
 - **Precondition:** Must not be on the configured trunk branch (`.shpeck.toml.trunk_branch`).
 - Prompts for confirmation before proceeding.
 - Runs relevant tests and logs results in `.dev/run.md`.
